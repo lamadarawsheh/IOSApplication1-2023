@@ -22,6 +22,7 @@ class DetailsViewController: UIViewController {
     var user:UserO? = nil
     
     
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
