@@ -15,47 +15,77 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     @IBOutlet   var tableView :UITableView!
     var names:[UserO] = []
     let UserUrl:String = "users"
-  
+    var ll:String = "dddd"
+  private let requestHandler =  RequestsHandler()
+
+
+
     override func viewDidLoad()  {
 
         
-        Task {
-                        try await excuteRequest()
-                    }
-                
+        excuteRequest()
+               
+       
+       
+        
         
             tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
-    
+
             tableView.dataSource = self
             tableView.delegate = self
-            
-            
+
+
             
             super.viewDidLoad()
            
         }
-    func excuteRequest() async throws {
-        let r = RequestsHandler()
-        
-        async let getValue = r.getRequest(UserUrl)
-
-        let responses = try await (getValue)
-
-                        let json = responses.data(using: .utf8)!
-                        let users: [User] = try!JSONDecoder().decode([User].self,from:json)
-
-        for user in users {
-            let t = UserO(u: user)
-         
-            names.append(t)
-        }
-       
-        self.tableView.reloadData()
-
-      
-    }
+//    func excuteRequest() async throws {
+//        let r = RequestsHandler()
+//
+//        async let getValue = r.getRequest(UserUrl)
+//
+//        let responses = try await (getValue)
+//
+//                        let json = responses.data(using: .utf8)!
+//                        let users: [User] = try!JSONDecoder().decode([User].self,from:json)
+//
+//        for user in users {
+//            let t = UserO(u: user)
+//
+//            names.append(t)
+//        }
+//
+//        self.tableView.reloadData()
+//
+//
+//    }
     
+    func excuteRequest(){
+        
+        requestHandler.getRequest(UserUrl,completion: {
+            (r)-> Void  in
 
+            self.ll = r
+            let decoder = JSONDecoder()
+            let jsonData = Data(r.utf8)
+            do {
+                let users: [User] = try decoder.decode([User].self, from: jsonData)
+                
+//                print(users.count)
+                for user in users {
+                        let t = UserO(u: user)
+               
+                    self.names.append(t)
+                    
+                       }
+                self.tableView.reloadData()
+            } catch {
+                print(error.localizedDescription)
+            }
+           
+        })
+        
+    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
              print("You tapped cell number \(indexPath.row).")

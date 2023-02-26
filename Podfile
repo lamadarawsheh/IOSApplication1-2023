@@ -7,4 +7,5 @@ target 'AlmoTest' do
 
   # Pods for AlmoTest
 pod "Alamofire"
+pod "SDWebImage"
 end
