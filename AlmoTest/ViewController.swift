@@ -64,23 +64,6 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         requestHandler.getRequest(UserUrl,completion: {
             (r)-> Void  in
 
-//
-//            let decoder = JSONDecoder()
-//            let jsonData = Data(r.utf8)
-//            do {
-//                let users: [User] = try decoder.decode([User].self, from: jsonData)
-//
-//                for user in users {
-//                        let t = UserClass(u: user)
-//
-//                    self.users.append(t)
-//
-//                       }
-//                self.tableView.reloadData()
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-            
             self.users = r
 
             self.tableView.reloadData()
@@ -109,16 +92,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         }
      
          }
-    
-    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ->UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath) as! CustomTableViewCell
-//
-//        cell.userNameLabel.text = users[indexPath.row].u.name
-//
-//           return cell
-//    }
-
+  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
         CustomTableViewCell
@@ -131,26 +105,17 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         }
         
         cell.accessoryType = .disclosureIndicator
-        
-//        cell.selectionStyle =
-       
-        //          let image = UIImage(named: "Arrow.png")
-//          let checkmark  = UIImageView(frame:CGRect(x:0, y:0, width:(image?.size.width)!, height:(image?.size.height)!));
-//          checkmark.image = image
-//        cell.accessoryView =
-
-        
-//        cell.accessoryType = disclosureIndicator()
+        cell.imageIcon.layer.borderWidth = 1.0
+        cell.imageIcon.layer.masksToBounds = false
+        cell.imageIcon.layer.borderColor = UIColor.blue.cgColor
+        var image = UIImage(named: "profile")
+        cell.imageIcon.image = image
+        cell.imageIcon.layer.cornerRadius = cell.imageIcon.frame.size.width/2
+      cell.imageIcon.clipsToBounds = true
         return cell
 
     }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//           return 1
-//       }
-       
-       // Set the spacing between sections
-     
-    
+
    
 }
 

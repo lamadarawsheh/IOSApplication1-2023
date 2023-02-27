@@ -91,39 +91,7 @@ class RequestsHandler  {
                                     }
 
                                 }
-//
-//
-//
-//                        }
-//                        AF.request(Url+url, method: .get).responseString {
-//                            response in
-//                            print (response.result)
-//
-//                            completion("hi")
-//                        }
-//
-//
-//                            if  let error = response.error{
-//                                completion(nil,error)
-//                                print("lammma")
-//                            }
-//                            else if let jsonarray = response.value as? [User]{
-//                                completion(jsonarray,nil)
-//                                print("lammkma")
-//
-//                            }
-//                            else if let jsondict = response.value as? User{
-//                                completion([jsondict],nil)
-//                                print("lama")
-//                            }
-//
-//
-//
-//
-                
-                
-                
-                
+         
             }
     }
 }

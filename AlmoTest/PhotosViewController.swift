@@ -36,16 +36,12 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! photosCollectionViewCell
         
         cell.label.text = photos[indexPath.row].ph.title
-//        cell.imageIcon.image = UIImage(named: "moon")
-        
+
         let url = URL(string:   photos[indexPath.row].ph.thumbnailUrl)!
         cell.imageIcon.sd_imageIndicator = SDWebImageActivityIndicator.gray
         cell.imageIcon.sd_imageIndicator?.startAnimatingIndicator()
         cell.imageIcon.sd_setImage(with: url, placeholderImage: UIImage(named: "moon"), options: .continueInBackground,completed: nil)
-        //             downloadImage(from: url)
-        //            cell.imageIcon.image =
-        //
-        
+   
         return cell
     }
     func excuteRequest()  {
