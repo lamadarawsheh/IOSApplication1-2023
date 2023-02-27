@@ -8,113 +8,150 @@
 import UIKit
 import Alamofire
 
+import MapKit
 
-
-class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSource{
+class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSource,UISearchResultsUpdating{
+    
    
     @IBOutlet   var tableView :UITableView!
-    var names:[UserO] = []
+    let searchController = UISearchController()
+    var users:[UserClass] = []
+    var filteredUsers:[UserClass] = []
     let UserUrl:String = "users"
-    var ll:String = "dddd"
+    @IBOutlet weak var mapView :MKMapView!
   private let requestHandler =  RequestsHandler()
 
 
 
     override func viewDidLoad()  {
 
-        
-        excuteRequest()
+    
+        fetchUsers()
                
-       
-       
-        
-        
             tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
 
             tableView.dataSource = self
             tableView.delegate = self
 
-
-            
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
             super.viewDidLoad()
            
         }
-//    func excuteRequest() async throws {
-//        let r = RequestsHandler()
-//
-//        async let getValue = r.getRequest(UserUrl)
-//
-//        let responses = try await (getValue)
-//
-//                        let json = responses.data(using: .utf8)!
-//                        let users: [User] = try!JSONDecoder().decode([User].self,from:json)
-//
-//        for user in users {
-//            let t = UserO(u: user)
-//
-//            names.append(t)
-//        }
-//
-//        self.tableView.reloadData()
-//
-//
-//    }
+  
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else {
+            return
+        }
+        filteredUsers.removeAll()
+        for user in self.users {
+            if(text == "") {
+            }
+            else{
+                if ( user.u.name.starts(with: text)){
+                                    filteredUsers.append(user)
+                    print(user.u.name)
+                }
+            }
+        }
+        print (filteredUsers.count)
+        tableView.reloadData()
+    }
     
-    func excuteRequest(){
+    
+    func fetchUsers(){
         
         requestHandler.getRequest(UserUrl,completion: {
             (r)-> Void  in
 
-            self.ll = r
-            let decoder = JSONDecoder()
-            let jsonData = Data(r.utf8)
-            do {
-                let users: [User] = try decoder.decode([User].self, from: jsonData)
-                
-//                print(users.count)
-                for user in users {
-                        let t = UserO(u: user)
-               
-                    self.names.append(t)
-                    
-                       }
-                self.tableView.reloadData()
-            } catch {
-                print(error.localizedDescription)
-            }
+//
+//            let decoder = JSONDecoder()
+//            let jsonData = Data(r.utf8)
+//            do {
+//                let users: [User] = try decoder.decode([User].self, from: jsonData)
+//
+//                for user in users {
+//                        let t = UserClass(u: user)
+//
+//                    self.users.append(t)
+//
+//                       }
+//                self.tableView.reloadData()
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+            
+            self.users = r
+
+            self.tableView.reloadData()
            
-        })
-        
+        },completion2: {(m)->Void in print ("")})
+       
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
              print("You tapped cell number \(indexPath.row).")
        
 
-       let details  = self.storyboard?.instantiateViewController(identifier: "details") as!   DetailsViewController
+       let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
 
                              self.navigationController?.pushViewController(details, animated: true)
-        details.user = names[indexPath.row]
-//        details.name = names[indexPath.row].u.username
-//        details.email = names[indexPath.row].u.email
-//        details.phone = names[indexPath.row].u.phone
-//        details.address = names[indexPath.row].u.address.city + "-" + names[indexPath.row].u.address.street + "-" + names[indexPath.row].u.address.suite + "-" + names[indexPath.row].u.address.zipcode
+        details.user = users[indexPath.row]
+
          }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
-        return self.names.count
+        if (filteredUsers.isEmpty){
+            return self.users.count
+        }
+        else {
+            return self.filteredUsers.count
+        }
+     
          }
     
+    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ->UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath) as! CustomTableViewCell
+//
+//        cell.userNameLabel.text = users[indexPath.row].u.name
+//
+//           return cell
+//    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
+        CustomTableViewCell
         
-        cell.textLabel?.text = names[indexPath.row].u.name
-//        cell.imageViewIcon.image = UIImage(named: "moon" )
-         
-           return cell
+        if (filteredUsers.isEmpty){
+            cell.userNameLabel.text = users[indexPath.row].u.name
+        }
+        else{
+            cell.userNameLabel.text = filteredUsers[indexPath.row].u.name
+        }
+        
+        cell.accessoryType = .disclosureIndicator
+        
+//        cell.selectionStyle =
+       
+        //          let image = UIImage(named: "Arrow.png")
+//          let checkmark  = UIImageView(frame:CGRect(x:0, y:0, width:(image?.size.width)!, height:(image?.size.height)!));
+//          checkmark.image = image
+//        cell.accessoryView =
+
+        
+//        cell.accessoryType = disclosureIndicator()
+        return cell
+
     }
-
-
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//           return 1
+//       }
+       
+       // Set the spacing between sections
+     
+    
+   
 }
 
 

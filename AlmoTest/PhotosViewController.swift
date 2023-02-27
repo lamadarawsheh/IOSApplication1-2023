@@ -45,34 +45,23 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource{
         //             downloadImage(from: url)
         //            cell.imageIcon.image =
         //
+        
         return cell
     }
     func excuteRequest()  {
 
-        
         requestHandler.getRequest(PhotoUrl,completion: {
             (r)-> Void  in
-
+            
+            print("")
            
-            let decoder = JSONDecoder()
-            let json = Data(r.utf8)
-            do {
-                let photos: [Photos] = try!JSONDecoder().decode([Photos].self,from:json)
-                
-                for ph in photos {
-                    let t = Photo(ph: ph)
-                    
-                    self.photos.append(t)
-                
-                    
-                       }
-                self.collectionView.reloadData()
-            } catch {
-                print(error.localizedDescription)
-            }
-           
-        })
-        
+        },completion2: {(m)->Void in
+            
+            self.photos = m
+            self.collectionView.reloadData()
+            
+           })
+      
         
         
     }

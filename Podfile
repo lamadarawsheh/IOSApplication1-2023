@@ -6,6 +6,5 @@ target 'AlmoTest' do
   use_frameworks!
 
   # Pods for AlmoTest
-pod "Alamofire"
-pod "SDWebImage"
+
 end

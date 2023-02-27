@@ -45,7 +45,7 @@ struct Company:Codable{
 
 
 
-class UserO {
+class UserClass {
 
     var u:User
     
