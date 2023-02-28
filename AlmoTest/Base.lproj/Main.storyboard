@@ -413,13 +413,13 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zxb-np-eJj">
                                     <size key="itemSize" width="168" height="243"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photo" id="Mqg-fb-KTb" customClass="photosCollectionViewCell" customModule="AlmoTest" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="168" height="243"/>
+                                        <rect key="frame" x="0.0" y="50" width="168" height="243"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="TF4-g3-LIb">
                                             <rect key="frame" x="0.0" y="0.0" width="168" height="243"/>
@@ -455,6 +455,23 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="xSY-kL-cB1">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aCp-TS-862">
+                                            <rect key="frame" x="24.000000000000004" y="16" width="43.333333333333343" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="aCp-TS-862" firstAttribute="leading" secondItem="xSY-kL-cB1" secondAttribute="leadingMargin" constant="16" id="5lP-az-W98"/>
+                                        <constraint firstItem="aCp-TS-862" firstAttribute="top" secondItem="xSY-kL-cB1" secondAttribute="topMargin" constant="8" id="De3-OK-HyQ"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="aCp-TS-862" secondAttribute="bottom" constant="8" id="RVf-pO-ES7"/>
+                                    </constraints>
+                                </collectionReusableView>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gzZ-R2-Jsd"/>

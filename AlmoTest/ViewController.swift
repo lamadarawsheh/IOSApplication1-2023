@@ -61,14 +61,14 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     
     func fetchUsers(){
         
-        requestHandler.getRequest(UserUrl,completion: {
+        requestHandler.getUsers(UserUrl,completionHandler: {
             (r)-> Void  in
 
             self.users = r
 
             self.tableView.reloadData()
            
-        },completion2: {(m)->Void in print ("")})
+        })
        
     }
 

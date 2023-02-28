@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		648934F1631F039863B05C4B /* Pods_AlmoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002D58FFACFAE2B4DB64BB36 /* Pods_AlmoTest.framework */; };
 		752F175629A3C4E900FCC6E6 /* RequestsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175529A3C4E900FCC6E6 /* RequestsHandler.swift */; };
 		752F175829A4CA5900FCC6E6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175729A4CA5900FCC6E6 /* User.swift */; };
 		752F175E29A6424400FCC6E6 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175D29A6424400FCC6E6 /* CustomTableViewCell.swift */; };
@@ -27,8 +26,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		002D58FFACFAE2B4DB64BB36 /* Pods_AlmoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AlmoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BBF6142A01395C86E7B1FD8 /* Pods-AlmoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlmoTest.debug.xcconfig"; path = "Target Support Files/Pods-AlmoTest/Pods-AlmoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		752F175529A3C4E900FCC6E6 /* RequestsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsHandler.swift; sourceTree = "<group>"; };
 		752F175729A4CA5900FCC6E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		752F175D29A6424400FCC6E6 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
@@ -44,7 +41,6 @@
 		75F562FB29A2B83C003A2E98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75F562FE29A2B83C003A2E98 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75F5630029A2B83C003A2E98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B509D1847259FFC083F4B970 /* Pods-AlmoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlmoTest.release.xcconfig"; path = "Target Support Files/Pods-AlmoTest/Pods-AlmoTest.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +51,6 @@
 				7546DE3C29AB906500208D7C /* SDWebImage in Frameworks */,
 				7546DE3E29AB906500208D7C /* SDWebImageMapKit in Frameworks */,
 				7546DE3929AB8FCC00208D7C /* Alamofire in Frameworks */,
-				648934F1631F039863B05C4B /* Pods_AlmoTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,8 +62,6 @@
 			children = (
 				75F562F129A2B83C003A2E98 /* AlmoTest */,
 				75F562F029A2B83C003A2E98 /* Products */,
-				79B2A0701869A108F072FD07 /* Pods */,
-				A1710A25BC8A4E7B79A912CD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,23 +94,6 @@
 			path = AlmoTest;
 			sourceTree = "<group>";
 		};
-		79B2A0701869A108F072FD07 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5BBF6142A01395C86E7B1FD8 /* Pods-AlmoTest.debug.xcconfig */,
-				B509D1847259FFC083F4B970 /* Pods-AlmoTest.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		A1710A25BC8A4E7B79A912CD /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				002D58FFACFAE2B4DB64BB36 /* Pods_AlmoTest.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -125,7 +101,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75F5630329A2B83C003A2E98 /* Build configuration list for PBXNativeTarget "AlmoTest" */;
 			buildPhases = (
-				B02B9D2A890F4367E1FD62F8 /* [CP] Check Pods Manifest.lock */,
 				75F562EB29A2B83C003A2E98 /* Sources */,
 				75F562EC29A2B83C003A2E98 /* Frameworks */,
 				75F562ED29A2B83C003A2E98 /* Resources */,
@@ -193,31 +168,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		B02B9D2A890F4367E1FD62F8 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AlmoTest-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		75F562EB29A2B83C003A2E98 /* Sources */ = {
@@ -375,7 +325,6 @@
 		};
 		75F5630429A2B83C003A2E98 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5BBF6142A01395C86E7B1FD8 /* Pods-AlmoTest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -403,7 +352,6 @@
 		};
 		75F5630529A2B83C003A2E98 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B509D1847259FFC083F4B970 /* Pods-AlmoTest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

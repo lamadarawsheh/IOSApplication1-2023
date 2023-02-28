@@ -46,17 +46,14 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource{
     }
     func excuteRequest()  {
 
-        requestHandler.getRequest(PhotoUrl,completion: {
+        requestHandler.getPhotos(PhotoUrl,completionHandler: {
             (r)-> Void  in
-            
-            print("")
-           
-        },completion2: {(m)->Void in
-            
-            self.photos = m
+
+            self.photos = r
+
             self.collectionView.reloadData()
-            
-           })
+           
+        })
       
         
         

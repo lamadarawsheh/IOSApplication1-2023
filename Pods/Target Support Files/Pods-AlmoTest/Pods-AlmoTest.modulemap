@@ -1,6 +1,0 @@
-framework module Pods_AlmoTest {
-  umbrella header "Pods-AlmoTest-umbrella.h"
-
-  export *
-  module * { export * }
-}
