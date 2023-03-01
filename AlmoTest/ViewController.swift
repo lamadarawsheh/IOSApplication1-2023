@@ -8,113 +8,145 @@
 import UIKit
 import Alamofire
 
+import MapKit
 
-
-class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSource{
+class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSource,UISearchResultsUpdating{
+    
    
     @IBOutlet   var tableView :UITableView!
-    var names:[UserO] = []
+    
+    @IBOutlet weak var userNotFoundLabel: UILabel!
+    let searchController = UISearchController()
+    var users:[UserClass] = []
+    var filteredUsers:[UserClass] = []
+    var isSearching:Bool = false
     let UserUrl:String = "users"
-    var ll:String = "dddd"
-  private let requestHandler =  RequestsHandler()
-
+    @IBOutlet weak var mapView :MKMapView!
+    private let requestHandler =  RequestsHandler()
+   
 
 
     override func viewDidLoad()  {
 
-        
-        excuteRequest()
+            fetchUsers()
                
-       
-       
-        
-        
             tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
 
             tableView.dataSource = self
             tableView.delegate = self
 
+            navigationItem.searchController = searchController
+            searchController.searchResultsUpdater = self
 
-            
             super.viewDidLoad()
-           
-        }
-//    func excuteRequest() async throws {
-//        let r = RequestsHandler()
-//
-//        async let getValue = r.getRequest(UserUrl)
-//
-//        let responses = try await (getValue)
-//
-//                        let json = responses.data(using: .utf8)!
-//                        let users: [User] = try!JSONDecoder().decode([User].self,from:json)
-//
-//        for user in users {
-//            let t = UserO(u: user)
-//
-//            names.append(t)
-//        }
-//
-//        self.tableView.reloadData()
-//
-//
-//    }
-    
-    func excuteRequest(){
-        
-        requestHandler.getRequest(UserUrl,completion: {
-            (r)-> Void  in
+       
 
-            self.ll = r
-            let decoder = JSONDecoder()
-            let jsonData = Data(r.utf8)
-            do {
-                let users: [User] = try decoder.decode([User].self, from: jsonData)
-                
-//                print(users.count)
-                for user in users {
-                        let t = UserO(u: user)
-               
-                    self.names.append(t)
-                    
-                       }
-                self.tableView.reloadData()
-            } catch {
-                print(error.localizedDescription)
-            }
-           
-        })
+        }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      
+            self.searchController.searchBar.endEditing(true)
         
+    }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        filteredUsers.removeAll()
+        
+        if let text = searchController.searchBar.text{
+            
+            if !(text == "")
+            {
+                filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
+                isSearching = true
+            }
+            else
+            {
+                isSearching = false
+            }
+            
+            tableView.reloadData()
+        }
+    }
+    
+    func fetchUsers(){
+        
+        requestHandler.getUsers(completionHandler: {
+                (r)-> Void  in
+
+                self.users = r
+
+                self.tableView.reloadData()
+            
+        })
+       
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-             print("You tapped cell number \(indexPath.row).")
+        
+            if (!(filteredUsers.isEmpty && isSearching == true))
+            {
+                let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
+                self.navigationController?.pushViewController(details, animated: true)
+                details.user = users[indexPath.row]
+            
+            }
+     
        
-
-       let details  = self.storyboard?.instantiateViewController(identifier: "details") as!   DetailsViewController
-
-                             self.navigationController?.pushViewController(details, animated: true)
-        details.user = names[indexPath.row]
-//        details.name = names[indexPath.row].u.username
-//        details.email = names[indexPath.row].u.email
-//        details.phone = names[indexPath.row].u.phone
-//        details.address = names[indexPath.row].u.address.city + "-" + names[indexPath.row].u.address.street + "-" + names[indexPath.row].u.address.suite + "-" + names[indexPath.row].u.address.zipcode
          }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
-        return self.names.count
-         }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath)
+       
+            if (filteredUsers.isEmpty && isSearching == false)
+            {
+                return self.users.count
+            }
         
-        cell.textLabel?.text = names[indexPath.row].u.name
-//        cell.imageViewIcon.image = UIImage(named: "moon" )
-         
-           return cell
+            else if (filteredUsers.isEmpty && isSearching == true)
+            {
+                return 1
+            }
+            else
+            {
+                return self.filteredUsers.count
+            }
+     
+         }
+  
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
+        CustomTableViewCell
+        
+        if (filteredUsers.isEmpty && isSearching == false)
+        {
+            cell.user = users[indexPath.row]
+            cell.isHidden = false
+            userNotFoundLabel.isHidden = true
+
+        }
+        else if (filteredUsers.isEmpty && isSearching == true)
+        {
+            
+            userNotFoundLabel.isHidden = false
+            userNotFoundLabel.text = "User not found !"
+            cell.isHidden = true
+            
+        }
+        else
+        {
+            cell.user = filteredUsers[indexPath.row]
+            cell.isHidden = false
+            userNotFoundLabel.isHidden = true
+          
+        }
+           
+            return cell
+
     }
 
-
+   
 }
 
 
