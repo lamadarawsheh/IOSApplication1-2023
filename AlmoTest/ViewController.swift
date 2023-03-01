@@ -17,15 +17,15 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     let searchController = UISearchController()
     var users:[UserClass] = []
     var filteredUsers:[UserClass] = []
+    var flag:Bool = false
     let UserUrl:String = "users"
     @IBOutlet weak var mapView :MKMapView!
   private let requestHandler =  RequestsHandler()
-
+   
 
 
     override func viewDidLoad()  {
-
-    
+//        self.tabBarController?.tabBar.isHidden = false
         fetchUsers()
                
             tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
@@ -36,25 +36,30 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
             super.viewDidLoad()
-           
+       
+
         }
   
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else {
             return
         }
+        
         filteredUsers.removeAll()
         for user in self.users {
             if(text == "") {
+                flag = false
             }
             else{
-                if ( user.u.name.starts(with: text)){
+                flag = true
+                if(user.u.name.contains(text)){
+//                if ( user.u.name.starts(with: text)){
                                     filteredUsers.append(user)
-                    print(user.u.name)
+//                    print(user.u.name)
                 }
             }
         }
-        print (filteredUsers.count)
+//        print (filteredUsers.count)
         tableView.reloadData()
     }
     
@@ -67,25 +72,30 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
             self.users = r
 
             self.tableView.reloadData()
-           
+            
         })
        
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
              print("You tapped cell number \(indexPath.row).")
-       
-
-       let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
-
-                             self.navigationController?.pushViewController(details, animated: true)
-        details.user = users[indexPath.row]
-
+        if (filteredUsers.isEmpty && flag == true){
+//            self.tabBarController?.tabBar.isHidden = false
+        }
+        else{
+            let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
+            self.navigationController?.pushViewController(details, animated: true)
+            details.user = users[indexPath.row]
+            
+        }
          }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
-        if (filteredUsers.isEmpty){
+        if (filteredUsers.isEmpty && flag == false){
             return self.users.count
+        }
+        else if (filteredUsers.isEmpty && flag == true){
+            return 1
         }
         else {
             return self.filteredUsers.count
@@ -97,13 +107,21 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
         CustomTableViewCell
         
-        if (filteredUsers.isEmpty){
+        if (filteredUsers.isEmpty && flag == false){
             cell.userNameLabel.text = users[indexPath.row].u.name
+            cell.username .text = users[indexPath.row].u.username
+        }
+        else if (filteredUsers.isEmpty && flag == true){
+            cell.userNameLabel.text = "User not found"
+            cell.username .text = ""
+            
+            
         }
         else{
             cell.userNameLabel.text = filteredUsers[indexPath.row].u.name
+            cell.username.text = filteredUsers[indexPath.row].u.username
         }
-        
+        cell.selectionStyle = .none
         cell.accessoryType = .disclosureIndicator
         cell.imageIcon.layer.borderWidth = 1.0
         cell.imageIcon.layer.masksToBounds = false

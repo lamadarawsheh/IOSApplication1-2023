@@ -24,11 +24,12 @@ class CustomDetailsViewController: UIViewController {
     @IBOutlet weak var mapKitView: MKMapView!
     
     @IBOutlet weak var imageIcon: UIImageView!
+    
     override func viewDidLoad() {
        
         
         super.viewDidLoad()
-        
+//        createStackView()
         self.imageIcon.layer.borderWidth = 1.0
         self.imageIcon.layer.masksToBounds = false
         self.imageIcon.layer.borderColor = UIColor.blue.cgColor
@@ -37,9 +38,9 @@ class CustomDetailsViewController: UIViewController {
         imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
       self.imageIcon.clipsToBounds = true
         
+
         
-        
-        title = (user?.u.username)!+" details"
+        title = (user?.u.name)!+" details"
     usernameTextView.text = user?.u.username
     emailTextView.text = user?.u.email
     phoneTextView.text = user?.u.phone
@@ -56,7 +57,18 @@ class CustomDetailsViewController: UIViewController {
         
     }
    
-    
+//    func createStackView(){
+//        let stackView = UIStackView(arrangedSubviews: [mapKitView,imageIcon])
+////        stackView.frame = view.frame
+////        stackView.backgroundColor = .systemRed
+//        stackView.axis = .vertical
+////        stackView.distribution = .fillProportionally
+////        stackView.spacing = 20
+//        view.addSubview(stackView)
+//
+//
+//
+//    }
     func setStartingLocation(location:CLLocation,distance:CLLocationDistance){
         
         let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)

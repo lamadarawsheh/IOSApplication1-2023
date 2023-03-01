@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75254C1729AE4E7F0073160C /* PhotoCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75254C1629AE4E7F0073160C /* PhotoCollectionReusableView.swift */; };
 		752F175629A3C4E900FCC6E6 /* RequestsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175529A3C4E900FCC6E6 /* RequestsHandler.swift */; };
 		752F175829A4CA5900FCC6E6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175729A4CA5900FCC6E6 /* User.swift */; };
 		752F175E29A6424400FCC6E6 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175D29A6424400FCC6E6 /* CustomTableViewCell.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		75254C1629AE4E7F0073160C /* PhotoCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionReusableView.swift; sourceTree = "<group>"; };
 		752F175529A3C4E900FCC6E6 /* RequestsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsHandler.swift; sourceTree = "<group>"; };
 		752F175729A4CA5900FCC6E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		752F175D29A6424400FCC6E6 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				752F175F29A678B000FCC6E6 /* photosCollectionViewCell.swift */,
 				75A70BD629ACBCA100A0A443 /* CustomDetailsViewController.swift */,
 				752F176129A67D0300FCC6E6 /* PhotosViewController.swift */,
+				75254C1629AE4E7F0073160C /* PhotoCollectionReusableView.swift */,
 				752F175729A4CA5900FCC6E6 /* User.swift */,
 				752F176329A680B400FCC6E6 /* Photos.swift */,
 				75F562F829A2B83C003A2E98 /* Main.storyboard */,
@@ -183,6 +186,7 @@
 				752F175829A4CA5900FCC6E6 /* User.swift in Sources */,
 				752F176029A678B000FCC6E6 /* photosCollectionViewCell.swift in Sources */,
 				75F562F529A2B83C003A2E98 /* SceneDelegate.swift in Sources */,
+				75254C1729AE4E7F0073160C /* PhotoCollectionReusableView.swift in Sources */,
 				752F176429A680B400FCC6E6 /* Photos.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
