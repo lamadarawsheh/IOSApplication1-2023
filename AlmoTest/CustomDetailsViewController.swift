@@ -49,9 +49,9 @@ class CustomDetailsViewController: UIViewController {
              let lng = User.u.address.geo.lng
                 
             let lat = User.u.address.geo.lat
-            var doublelng:Double = Double(lng)!
-            var doublelat:Double = Double(lat)!
-            var  initialLoc = CLLocation(latitude:doublelat , longitude: doublelng )
+            let doublelng:Double = Double(lng)!
+            let doublelat:Double = Double(lat)!
+            let  initialLoc = CLLocation(latitude:doublelat , longitude: doublelng )
             setStartingLocation(location: initialLoc ,distance:1000)
             addAnnotation(doublelat ,doublelng , User.u.name)
 
