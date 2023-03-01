@@ -9,10 +9,12 @@ import UIKit
 
 class CustomTableViewCell: UITableViewCell {
 
-//    @IBOutlet weak var imageVieww:UIImageView!
-    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     
-    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var usernameLabel: UILabel!
+    
+    @IBOutlet weak var userNotFoundLabel: UILabel!
+   
     @IBOutlet weak var imageIcon: UIImageView!
 
 }

@@ -25,23 +25,54 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
 
 
     override func viewDidLoad()  {
-//        self.tabBarController?.tabBar.isHidden = false
-        fetchUsers()
+
+            fetchUsers()
                
             tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
 
             tableView.dataSource = self
             tableView.delegate = self
 
-        navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
-            super.viewDidLoad()
+            navigationItem.searchController = searchController
+            searchController.searchResultsUpdater = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardApperence(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDisappear(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+            
+        super.viewDidLoad()
        
 
         }
+    
+    var isExpand:Bool = false
+            
+    @objc func keyboardApperence(notification: NSNotification){
+            if !isExpand{
+                let keyboardSize:CGSize = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.size
+                     
+
+                     let height = min(keyboardSize.height, keyboardSize.width)
+                
+                    self.tableView.contentSize = CGSize(width: self.view.frame.width, height: tableView.contentSize.height + height)
+                    isExpand = true
+            }
+        }
+    @objc func keyboardDisappear(notification: NSNotification){
+            if isExpand{
+                let keyboardSize:CGSize = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.size
+               
+
+                     let height = min(keyboardSize.height, keyboardSize.width)
+                    
+                    self.tableView.contentSize = CGSize(width: self.view.frame.width, height: tableView.contentSize.height   - height )
+                    isExpand = false
+            }
+            
+        }
+    
   
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else {
+            guard let text = searchController.searchBar.text else {
             return
         }
         
@@ -52,21 +83,21 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
             }
             else{
                 flag = true
-                if(user.u.name.contains(text)){
-//                if ( user.u.name.starts(with: text)){
+                    if(user.u.name.contains(text)){
+
                                     filteredUsers.append(user)
-//                    print(user.u.name)
+
+                    }
                 }
-            }
         }
-//        print (filteredUsers.count)
+
         tableView.reloadData()
     }
     
     
     func fetchUsers(){
         
-        requestHandler.getUsers(UserUrl,completionHandler: {
+        requestHandler.getUsers(completionHandler: {
             (r)-> Void  in
 
             self.users = r
@@ -80,7 +111,6 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
              print("You tapped cell number \(indexPath.row).")
         if (filteredUsers.isEmpty && flag == true){
-//            self.tabBarController?.tabBar.isHidden = false
         }
         else{
             let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
@@ -108,28 +138,41 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         CustomTableViewCell
         
         if (filteredUsers.isEmpty && flag == false){
-            cell.userNameLabel.text = users[indexPath.row].u.name
-            cell.username .text = users[indexPath.row].u.username
+            cell.nameLabel.text = users[indexPath.row].u.name
+            cell.usernameLabel .text = users[indexPath.row].u.username
+            cell.imageIcon.isHidden = false
+            cell.userNotFoundLabel.isHidden = true
+            cell.usernameLabel.isHidden = false
+            cell.nameLabel.isHidden = false
+            cell.accessoryType = .disclosureIndicator
         }
         else if (filteredUsers.isEmpty && flag == true){
-            cell.userNameLabel.text = "User not found"
-            cell.username .text = ""
-            
+            cell.userNotFoundLabel.isHidden = false
+            cell.userNotFoundLabel.text = "User not found"
+            cell.usernameLabel.isHidden = true
+            cell.nameLabel.isHidden = true
+            cell.imageIcon.isHidden = true
+            cell.accessoryType = .none
             
         }
         else{
-            cell.userNameLabel.text = filteredUsers[indexPath.row].u.name
-            cell.username.text = filteredUsers[indexPath.row].u.username
+            cell.nameLabel.text = filteredUsers[indexPath.row].u.name
+            cell.usernameLabel.text = filteredUsers[indexPath.row].u.username
+            cell.imageIcon.isHidden = false
+            cell.userNotFoundLabel.isHidden = true
+            cell.usernameLabel.isHidden = false
+            cell.nameLabel.isHidden = false
+            cell.accessoryType = .disclosureIndicator
         }
         cell.selectionStyle = .none
-        cell.accessoryType = .disclosureIndicator
+        
         cell.imageIcon.layer.borderWidth = 1.0
         cell.imageIcon.layer.masksToBounds = false
         cell.imageIcon.layer.borderColor = UIColor.blue.cgColor
-        var image = UIImage(named: "profile")
+        let image = UIImage(named: "profile")
         cell.imageIcon.image = image
         cell.imageIcon.layer.cornerRadius = cell.imageIcon.frame.size.width/2
-      cell.imageIcon.clipsToBounds = true
+        cell.imageIcon.clipsToBounds = true
         return cell
 
     }

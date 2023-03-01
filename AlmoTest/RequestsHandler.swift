@@ -14,22 +14,24 @@ import Alamofire
 class RequestsHandler  {
     
     let Url:String = "https://jsonplaceholder.typicode.com/"
+    let UsersUrl:String = "https://jsonplaceholder.typicode.com/users"
+    let PhotosUrl:String = "https://jsonplaceholder.typicode.com/photos"
     typealias usersCompletionHandler = ([UserClass])->Void
     typealias photosCompletionHandler = ([Photo])->Void
     var users:[UserClass] = []
     var photos:[Photo] = []
     var arr:[AnyObject]=[]
     
-    func getUsers(_ url:String,completionHandler:@escaping usersCompletionHandler ){
-        AF.request(Url+url, method: .get)
+    func getUsers(completionHandler:@escaping usersCompletionHandler ){
+        AF.request(UsersUrl, method: .get)
             .responseString{
                 response in
                 switch response.result{
                 case let .success(value):
-                    let decoder = JSONDecoder()
+
                     let jsonData = Data(value.utf8)
                     do {
-                        let users: [User] = try!JSONDecoder().decode([User].self,from:jsonData)
+                        let users: [User] = try JSONDecoder().decode([User].self,from:jsonData)
 
                         for u in users {
                             let t = UserClass(u: u)
@@ -45,42 +47,42 @@ class RequestsHandler  {
                     }
              
                     
-                case let .failure(value):
-                    print("failure")
-                    
+              
                 
+                case .failure(_):
+                    print("failure")
                 }
                                 }
         
     }
     
-    func getPhotos(_ url:String,completionHandler:@escaping photosCompletionHandler){
-        AF.request(Url+url, method: .get)
+    func getPhotos(completionHandler:@escaping photosCompletionHandler){
+        AF.request(PhotosUrl, method: .get)
             .responseString{
                 response in
                 switch response.result{
 
                 case let .success(value):
-                    let decoder = JSONDecoder()
+
                     let jsonData = Data(value.utf8)
                     do {
-                        let photos: [Photos] = try!JSONDecoder().decode([Photos].self,from:jsonData)
+                        let photos: [Photos] = try JSONDecoder().decode([Photos].self,from:jsonData)
 
                         for ph in photos {
                             let t = Photo(ph: ph)
 
                             self.photos.append(t)
 
-                        }
+                                        }
                         completionHandler(self.photos)
 
                     }
                     catch {
                         print(error.localizedDescription)
-                    }
+                         }
 
 
-                case let .failure(value):
+                case .failure(_):
                     print("failure")
 
                 }

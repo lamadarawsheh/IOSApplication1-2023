@@ -29,56 +29,49 @@ class CustomDetailsViewController: UIViewController {
        
         
         super.viewDidLoad()
-//        createStackView()
+
         self.imageIcon.layer.borderWidth = 1.0
         self.imageIcon.layer.masksToBounds = false
         self.imageIcon.layer.borderColor = UIColor.blue.cgColor
-        var image = UIImage(named: "profile")
+        let image = UIImage(named: "profile")
         imageIcon.image = image
         imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
-      self.imageIcon.clipsToBounds = true
+        self.imageIcon.clipsToBounds = true
         
+        if let User = user{
+            title = (User.u.name)+" details"
+            usernameTextView.text = User.u.username
+            emailTextView.text = User.u.email
+            phoneTextView.text = User.u.phone
+        
+            addressTextView.text = User.u.address.city + "\n" + User.u.address.street + "\n" + User.u.address.suite + "\n" + User.u.address.zipcode
+            
+             let lng = User.u.address.geo.lng
+                
+            let lat = User.u.address.geo.lat
+            var doublelng:Double = Double(lng)!
+            var doublelat:Double = Double(lat)!
+            var  initialLoc = CLLocation(latitude:doublelat , longitude: doublelng )
+            setStartingLocation(location: initialLoc ,distance:1000)
+            addAnnotation(doublelat ,doublelng , User.u.name)
+
+        }
 
         
-        title = (user?.u.name)!+" details"
-    usernameTextView.text = user?.u.username
-    emailTextView.text = user?.u.email
-    phoneTextView.text = user?.u.phone
-    
-    addressTextView.text = (user?.u.address.city)! + "-" + (user?.u.address.street)! + "-" + (user?.u.address.suite)! + "-"
-    + (user?.u.address.zipcode)!
-        guard var lng = Double((user?.u.address.geo.lng)!) else { return  }
-      guard  var lat = Double((user?.u.address.geo.lat)!) else
-        {return }
-
-        var initialLoc = CLLocation(latitude: lat, longitude: lng)
-        setStartingLocation(location: initialLoc ,distance:1000)
-        addAnnotation(lat,lng,user?.u.name)
+      
         
     }
-   
-//    func createStackView(){
-//        let stackView = UIStackView(arrangedSubviews: [mapKitView,imageIcon])
-////        stackView.frame = view.frame
-////        stackView.backgroundColor = .systemRed
-//        stackView.axis = .vertical
-////        stackView.distribution = .fillProportionally
-////        stackView.spacing = 20
-//        view.addSubview(stackView)
-//
-//
-//
-//    }
+
     func setStartingLocation(location:CLLocation,distance:CLLocationDistance){
         
         let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
         mapKitView.setRegion(region, animated: true)
     }
     
-    func addAnnotation(_ lat:Double,_ lng:Double ,_ name:String?){
+    func addAnnotation(_ lat:Double,_ lng:Double ,_ name:String){
         let pin = MKPointAnnotation()
         pin.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        pin.title = name! + "'s current Address"
+        pin.title = name + "'s current Address"
         mapKitView.addAnnotation(pin)
     }
     
