@@ -14,8 +14,8 @@ import Alamofire
 class RequestsHandler  {
     
     let Url:String = "https://jsonplaceholder.typicode.com/"
-    let UsersUrl:String = "https://jsonplaceholder.typicode.com/users"
-    let PhotosUrl:String = "https://jsonplaceholder.typicode.com/photos"
+    let UsersUrl:String = "users"
+    let PhotosUrl:String = "photos"
     typealias usersCompletionHandler = ([UserClass])->Void
     typealias photosCompletionHandler = ([Photo])->Void
     var users:[UserClass] = []
@@ -23,7 +23,7 @@ class RequestsHandler  {
     var arr:[AnyObject]=[]
     
     func getUsers(completionHandler:@escaping usersCompletionHandler ){
-        AF.request(UsersUrl, method: .get)
+        AF.request(Url+UsersUrl, method: .get)
             .responseString{
                 response in
                 switch response.result{
@@ -57,7 +57,7 @@ class RequestsHandler  {
     }
     
     func getPhotos(completionHandler:@escaping photosCompletionHandler){
-        AF.request(PhotosUrl, method: .get)
+        AF.request(Url+PhotosUrl, method: .get)
             .responseString{
                 response in
                 switch response.result{

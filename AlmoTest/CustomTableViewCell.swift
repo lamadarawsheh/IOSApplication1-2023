@@ -13,8 +13,38 @@ class CustomTableViewCell: UITableViewCell {
     
     @IBOutlet weak var usernameLabel: UILabel!
     
-    @IBOutlet weak var userNotFoundLabel: UILabel!
-   
     @IBOutlet weak var imageIcon: UIImageView!
+    
+    var user:UserClass? = nil{
+        didSet {
+            if let user = user {
+                nameLabel.text = user.u.name
+                usernameLabel.text = user.u.username
+                setImage()
+                self.accessoryType = .disclosureIndicator
+            }
+            
+        }
+    }
+   
+    
+   
+    
+    func setImage(){
+        
+        
+        imageIcon.layer.borderWidth = 1.0
+        imageIcon.layer.masksToBounds = false
+        imageIcon.layer.borderColor = UIColor.blue.cgColor
+        let image = UIImage(named: "profile")
+        imageIcon.image = image
+        imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
+        imageIcon.clipsToBounds = true
+        
+        
+        
+    }
 
+    
+    
 }

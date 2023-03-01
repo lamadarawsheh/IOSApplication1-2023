@@ -11,8 +11,7 @@ import MapKit
 class CustomDetailsViewController: UIViewController {
     
     var user:UserClass? = nil
-//    @IBOutlet weak var imageIcon:UIImageView!
-    
+
     @IBOutlet weak var usernameTextView: UITextView!
     
     @IBOutlet weak var emailTextView: UITextView!

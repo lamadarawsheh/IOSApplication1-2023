@@ -14,13 +14,15 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     
    
     @IBOutlet   var tableView :UITableView!
+    
+    @IBOutlet weak var userNotFoundLabel: UILabel!
     let searchController = UISearchController()
     var users:[UserClass] = []
     var filteredUsers:[UserClass] = []
-    var flag:Bool = false
+    var isSearching:Bool = false
     let UserUrl:String = "users"
     @IBOutlet weak var mapView :MKMapView!
-  private let requestHandler =  RequestsHandler()
+    private let requestHandler =  RequestsHandler()
    
 
 
@@ -35,145 +37,112 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
 
             navigationItem.searchController = searchController
             searchController.searchResultsUpdater = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardApperence(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDisappear(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-            
-        super.viewDidLoad()
+
+            super.viewDidLoad()
        
 
         }
     
-    var isExpand:Bool = false
-            
-    @objc func keyboardApperence(notification: NSNotification){
-            if !isExpand{
-                let keyboardSize:CGSize = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.size
-                     
-
-                     let height = min(keyboardSize.height, keyboardSize.width)
-                
-                    self.tableView.contentSize = CGSize(width: self.view.frame.width, height: tableView.contentSize.height + height)
-                    isExpand = true
-            }
-        }
-    @objc func keyboardDisappear(notification: NSNotification){
-            if isExpand{
-                let keyboardSize:CGSize = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.size
-               
-
-                     let height = min(keyboardSize.height, keyboardSize.width)
-                    
-                    self.tableView.contentSize = CGSize(width: self.view.frame.width, height: tableView.contentSize.height   - height )
-                    isExpand = false
-            }
-            
-        }
-    
-  
-    func updateSearchResults(for searchController: UISearchController) {
-            guard let text = searchController.searchBar.text else {
-            return
-        }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      
+            self.searchController.searchBar.endEditing(true)
         
-        filteredUsers.removeAll()
-        for user in self.users {
-            if(text == "") {
-                flag = false
-            }
-            else{
-                flag = true
-                    if(user.u.name.contains(text)){
-
-                                    filteredUsers.append(user)
-
-                    }
-                }
-        }
-
-        tableView.reloadData()
     }
     
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        filteredUsers.removeAll()
+        
+        if let text = searchController.searchBar.text{
+            
+            if !(text == "")
+            {
+                filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
+                isSearching = true
+            }
+            else
+            {
+                isSearching = false
+            }
+            
+            tableView.reloadData()
+        }
+    }
     
     func fetchUsers(){
         
         requestHandler.getUsers(completionHandler: {
-            (r)-> Void  in
+                (r)-> Void  in
 
-            self.users = r
+                self.users = r
 
-            self.tableView.reloadData()
+                self.tableView.reloadData()
             
         })
        
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-             print("You tapped cell number \(indexPath.row).")
-        if (filteredUsers.isEmpty && flag == true){
-        }
-        else{
-            let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
-            self.navigationController?.pushViewController(details, animated: true)
-            details.user = users[indexPath.row]
+        
+            if (!(filteredUsers.isEmpty && isSearching == true))
+            {
+                let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
+                self.navigationController?.pushViewController(details, animated: true)
+                details.user = users[indexPath.row]
             
-        }
+            }
+     
+       
          }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
-        if (filteredUsers.isEmpty && flag == false){
-            return self.users.count
-        }
-        else if (filteredUsers.isEmpty && flag == true){
-            return 1
-        }
-        else {
-            return self.filteredUsers.count
-        }
+       
+            if (filteredUsers.isEmpty && isSearching == false)
+            {
+                return self.users.count
+            }
+        
+            else if (filteredUsers.isEmpty && isSearching == true)
+            {
+                return 1
+            }
+            else
+            {
+                return self.filteredUsers.count
+            }
      
          }
   
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
         CustomTableViewCell
         
-        if (filteredUsers.isEmpty && flag == false){
-            cell.nameLabel.text = users[indexPath.row].u.name
-            cell.usernameLabel .text = users[indexPath.row].u.username
-            cell.imageIcon.isHidden = false
-            cell.userNotFoundLabel.isHidden = true
-            cell.usernameLabel.isHidden = false
-            cell.nameLabel.isHidden = false
-            cell.accessoryType = .disclosureIndicator
+        if (filteredUsers.isEmpty && isSearching == false)
+        {
+            cell.user = users[indexPath.row]
+            cell.isHidden = false
+            userNotFoundLabel.isHidden = true
+
         }
-        else if (filteredUsers.isEmpty && flag == true){
-            cell.userNotFoundLabel.isHidden = false
-            cell.userNotFoundLabel.text = "User not found"
-            cell.usernameLabel.isHidden = true
-            cell.nameLabel.isHidden = true
-            cell.imageIcon.isHidden = true
-            cell.accessoryType = .none
+        else if (filteredUsers.isEmpty && isSearching == true)
+        {
+            
+            userNotFoundLabel.isHidden = false
+            userNotFoundLabel.text = "User not found !"
+            cell.isHidden = true
             
         }
-        else{
-            cell.nameLabel.text = filteredUsers[indexPath.row].u.name
-            cell.usernameLabel.text = filteredUsers[indexPath.row].u.username
-            cell.imageIcon.isHidden = false
-            cell.userNotFoundLabel.isHidden = true
-            cell.usernameLabel.isHidden = false
-            cell.nameLabel.isHidden = false
-            cell.accessoryType = .disclosureIndicator
+        else
+        {
+            cell.user = filteredUsers[indexPath.row]
+            cell.isHidden = false
+            userNotFoundLabel.isHidden = true
+          
         }
-        cell.selectionStyle = .none
-        
-        cell.imageIcon.layer.borderWidth = 1.0
-        cell.imageIcon.layer.masksToBounds = false
-        cell.imageIcon.layer.borderColor = UIColor.blue.cgColor
-        let image = UIImage(named: "profile")
-        cell.imageIcon.image = image
-        cell.imageIcon.layer.cornerRadius = cell.imageIcon.frame.size.width/2
-        cell.imageIcon.clipsToBounds = true
-        return cell
+           
+            return cell
 
     }
 
