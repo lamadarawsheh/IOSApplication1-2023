@@ -5,7 +5,7 @@
 //  Created by Lama Darawsheh on 27/02/2023.
 //
 
-import Foundation
+
 import UIKit
 import MapKit
 class CustomDetailsViewController: UIViewController {
