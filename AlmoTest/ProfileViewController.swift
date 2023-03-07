@@ -7,38 +7,42 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate,UITextFieldDelegate {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate,UITextFieldDelegate,UIActionSheetDelegate {
+    
+    @IBOutlet weak var editIcon: UIImageView!
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet var imageIcon:UIImageView!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
-   
     @IBOutlet weak var nameTextField: UITextField!
+    let defaultImage:UIImage = UIImage(named: "profile")!
+    var isNameEdited:Bool = false
+    var isUserNameEdited:Bool = false
+    var isEmailEdited:Bool = false
+    
     let imagePickerController = UIImagePickerController()
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        imageIcon.layer.borderWidth = 1.0
-        imageIcon.layer.masksToBounds = false
-        imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
-        imageIcon.clipsToBounds = true
+        setImages()
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         imageIcon.isUserInteractionEnabled = true
         imageIcon.addGestureRecognizer(tapGestureRecognizer)
-        
+        editIcon.addGestureRecognizer(tapGestureRecognizer2)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-  
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow),
-               name: UIResponder.keyboardDidShowNotification, object: nil)
+                                               name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden),
-               name: UIResponder.keyboardWillHideNotification, object: nil)
-
-
-       view.addGestureRecognizer(tap)
-   
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
+        view.addGestureRecognizer(tap)
+        
         nameTextField.delegate = self
         usernameTextField.delegate = self
         emailTextField.delegate = self
@@ -46,17 +50,33 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         configureItems()
         setElements()
     }
+    func setImages(){
+        imageIcon.layer.borderWidth = 1.0
+        imageIcon.layer.masksToBounds = false
+        imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
+        imageIcon.clipsToBounds = true
+        
+        editIcon.layer.masksToBounds = false
+        editIcon.layer.cornerRadius = editIcon.frame.size.width/2
+        editIcon.clipsToBounds = true
+        
+        
+        
+        
+        
+    }
+    
     
     @objc func keyboardDidShow(notification: Notification) {
-       
+        
         let activeField = view
-        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 30, right: 0.0)
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 50, right: 0.0)
         scrollview.contentInset = contentInsets
         scrollview.scrollIndicatorInsets = contentInsets
         let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
         scrollview.scrollRectToVisible(activeRect, animated: true)
     }
-
+    
     @objc func keyboardWillBeHidden(notification: Notification) {
         let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: -90, right: 0.0)
         scrollview.contentInset = contentInsets
@@ -65,25 +85,25 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-
+        
         switchBasedNextTextField(textField)
         return true
     }
-   func switchBasedNextTextField(_ textField: UITextField){
-       switch textField {
-       case self.nameTextField:
-           self.usernameTextField.becomeFirstResponder()
-       case self.usernameTextField:
-           self.emailTextField.becomeFirstResponder()
-       case self.emailTextField:
-           self.addressTextField.becomeFirstResponder()
-       case self.addressTextField:
-           view.endEditing(true)
-           
-       default:
-           self.nameTextField.resignFirstResponder()
-       }
-   }
+    func switchBasedNextTextField(_ textField: UITextField){
+        switch textField {
+        case self.nameTextField:
+            self.usernameTextField.becomeFirstResponder()
+        case self.usernameTextField:
+            self.emailTextField.becomeFirstResponder()
+        case self.emailTextField:
+            self.addressTextField.becomeFirstResponder()
+        case self.addressTextField:
+            view.endEditing(true)
+            
+        default:
+            self.nameTextField.resignFirstResponder()
+        }
+    }
     
     func setElements (){
         nameTextField.text = SingeltonUser.User.name
@@ -98,7 +118,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         addressTextField.returnKeyType = UIReturnKeyType.done
         
     }
-  
+    
     @objc func dismissKeyboard()
     {
         view.endEditing(true)
@@ -107,52 +127,131 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     {
         navigationItem.rightBarButtonItem = (
             UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveTapped(sender:))
-          
-       ))
-       
+                            
+                           ))
+        
         navigationItem.leftBarButtonItem = (
             UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelTapped(sender:))
-
-       ))
-        
-       
-       
+                            
+                           ))
+        if(!SingeltonUser.User.name.isEmpty){
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+        else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
-
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if(textField == self.nameTextField)
+        {
+            if(!self.nameTextField.text!.isEmpty)
+            {
+                isNameEdited = true
+                
+            }
+            else
+            {
+                isNameEdited = false
+            }
+        }
+        else if(textField == self.usernameTextField)
+        {
+            if(!self.usernameTextField.text!.isEmpty)
+            {
+                isUserNameEdited = true
+                
+            }
+            else
+            {
+                isUserNameEdited = false
+            }
+        }
+        else if(textField == self.emailTextField)
+        {
+            if(!self.emailTextField.text!.isEmpty)
+            {
+                isEmailEdited = true
+                
+            }
+            else
+            {
+                isEmailEdited = false
+            }
+        }
+        
+        if(isNameEdited == true && isUserNameEdited == true && isEmailEdited == true)
+        {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+        else {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            
+        }
+        
+    }
     
     @objc func saveTapped(sender: UIBarButtonItem)
     {
         SingeltonUser.User.setuser(nameTextField.text!,usernameTextField.text!,emailTextField.text!, addressTextField.text!, imageIcon.image!)
-
+        
         self.dismiss(animated: true, completion: nil)
     }
-  
+    
     @objc func cancelTapped(sender: UIBarButtonItem)
     {
         self.dismiss(animated: true, completion: nil)
-
+        
     }
     
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
     {
-        let tappedImage = tapGestureRecognizer.view as! UIImageView
-
-          imagePickerController.allowsEditing = true
-          imagePickerController.sourceType = .photoLibrary
-          imagePickerController.delegate = self
-          present(imagePickerController, animated: true, completion: nil)
-
+        
+        
+        let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        
+        let firstAction: UIAlertAction = UIAlertAction(title: "Pick Photo", style: .default) { [self] action -> Void in
+            
+            let tappedImage = tapGestureRecognizer.view as! UIImageView
+            imagePickerController.allowsEditing = false
+            imagePickerController.sourceType = .photoLibrary
+            imagePickerController.delegate = self
+            present(self.imagePickerController, animated: true, completion: nil)
+        }
+        
+        let secondAction: UIAlertAction = UIAlertAction(title: "Delete Photo", style: .default) { [self] action -> Void in
+            
+            imageIcon.image = self.defaultImage
+            
+        }
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in }
+        
+        
+        actionSheetController.addAction(firstAction)
+        if(SingeltonUser.User.image != defaultImage){
+            actionSheetController.addAction(secondAction)
+        }
+        
+        actionSheetController.addAction(cancelAction)
+        
+        actionSheetController.popoverPresentationController?.sourceView = view
+        present(actionSheetController, animated: true) {
+        }
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         imageIcon.image  = tempImage
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
-
+    
+    
+    
 }

@@ -14,7 +14,7 @@ class SingeltonUser{
     var username:String = ""
     var email:String = ""
     var address:String = ""
-    var image:UIImage = UIImage(systemName: "person.crop.circle.badge.plus")!
+    var image:UIImage = UIImage(named: "profile")!
     
 
     

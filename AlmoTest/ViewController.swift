@@ -25,26 +25,26 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     var image:UIImage = SingeltonUser.User.image
     @IBOutlet weak var mapView :MKMapView!
     private let requestHandler =  RequestsHandler()
-   
-
-
+    
+    
+    
     override func viewDidLoad()  {
-
-            fetchUsers()
-               
-            tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
-
-            tableView.dataSource = self
-            tableView.delegate = self
-
-            navigationItem.searchController = searchController
-            searchController.searchResultsUpdater = self
-            configureItems()
         
-           
-            super.viewDidLoad()
-       
-        }
+        fetchUsers()
+        
+        tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        configureItems()
+        
+        self.tabBarController?.selectedIndex = 0
+        super.viewDidLoad()
+        
+    }
     func configureItems(){
         
         let EditButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -56,33 +56,33 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         EditButton.layer.cornerRadius = EditButton.frame.width / 2
         EditButton.clipsToBounds = true
         EditButton.setBackgroundImage(image,for: .normal)
-       
+        
         EditButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: EditButton)
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         configureItems()
-    
+        
     }
-  
+    
     @objc func goToEdit(sender: UIBarButtonItem) {
-
-      let editProfile  = self.storyboard?.instantiateViewController(identifier: "profile") as!   ProfileViewController
-      let vc = UINavigationController(rootViewController: editProfile)
-      vc.modalPresentationStyle = .fullScreen
-      self.present(vc, animated: true, completion: nil)
-
-            }
+        
+        let editProfile  = self.storyboard?.instantiateViewController(identifier: "profile") as!   ProfileViewController
+        let vc = UINavigationController(rootViewController: editProfile)
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+        
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
-       
-            self.searchController.searchBar.endEditing(true)
+        
+        self.searchController.searchBar.endEditing(true)
         
     }
-  
+    
     
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -107,49 +107,49 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     func fetchUsers(){
         
         requestHandler.getUsers(completionHandler: {
-                (r)-> Void  in
-
-                self.users = r
-
-                self.tableView.reloadData()
+            (r)-> Void  in
+            
+            self.users = r
+            
+            self.tableView.reloadData()
             
         })
-       
+        
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-            if (!(filteredUsers.isEmpty && isSearching == true))
-            {
-                let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
-                details.user = users[indexPath.row]
-                self.navigationController?.pushViewController(details, animated: true)
+        if (!(filteredUsers.isEmpty && isSearching == true))
+        {
+            let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
+            details.user = users[indexPath.row]
+            self.navigationController?.pushViewController(details, animated: true)
             
-            }
-     
-       
-         }
+        }
+        
+        
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
-       
-            if (filteredUsers.isEmpty && isSearching == false)
-            {
-                return self.users.count
-            }
         
-            else if (filteredUsers.isEmpty && isSearching == true)
-            {
-                return 1
-            }
-            else
-            {
-                return self.filteredUsers.count
-            }
-     
-         }
-  
+        if (filteredUsers.isEmpty && isSearching == false)
+        {
+            return self.users.count
+        }
+        
+        else if (filteredUsers.isEmpty && isSearching == true)
+        {
+            return 1
+        }
+        else
+        {
+            return self.filteredUsers.count
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-     
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
         CustomTableViewCell
         
@@ -158,7 +158,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
             cell.user = users[indexPath.row]
             cell.isHidden = false
             userNotFoundLabel.isHidden = true
-
+            
         }
         else if (filteredUsers.isEmpty && isSearching == true)
         {
@@ -173,14 +173,14 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
             cell.user = filteredUsers[indexPath.row]
             cell.isHidden = false
             userNotFoundLabel.isHidden = true
-          
+            
         }
-           
-            return cell
-
+        
+        return cell
+        
     }
-
-   
+    
+    
 }
 
 
