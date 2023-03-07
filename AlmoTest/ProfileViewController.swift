@@ -69,12 +69,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     
     @objc func keyboardDidShow(notification: Notification) {
         
-        let activeField = view
-        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 50, right: 0.0)
-        scrollview.contentInset = contentInsets
-        scrollview.scrollIndicatorInsets = contentInsets
-        let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
-        scrollview.scrollRectToVisible(activeRect, animated: true)
+        
+        //
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            print (keyboardSize.height)
+            let activeField = view
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+            scrollview.contentInset = contentInsets
+            scrollview.scrollIndicatorInsets = contentInsets
+            let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
+            scrollview.scrollRectToVisible(activeRect, animated: true)
+        }
     }
     
     @objc func keyboardWillBeHidden(notification: Notification) {
@@ -142,9 +147,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         if(textField == self.nameTextField)
         {
+            print ("lllll")
             if(!self.nameTextField.text!.isEmpty)
             {
                 isNameEdited = true
@@ -154,6 +160,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
             {
                 isNameEdited = false
             }
+            print ("name")
+            print(isNameEdited)
         }
         else if(textField == self.usernameTextField)
         {
@@ -166,6 +174,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
             {
                 isUserNameEdited = false
             }
+            print ("uname")
+            print(isUserNameEdited)
         }
         else if(textField == self.emailTextField)
         {
@@ -178,6 +188,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
             {
                 isEmailEdited = false
             }
+            print ("em")
+            print(isEmailEdited)
         }
         
         if(isNameEdited == true && isUserNameEdited == true && isEmailEdited == true)
@@ -231,7 +243,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         
         
         actionSheetController.addAction(firstAction)
-        if(SingeltonUser.User.image != defaultImage){
+        if(imageIcon.image != defaultImage){
             actionSheetController.addAction(secondAction)
         }
         

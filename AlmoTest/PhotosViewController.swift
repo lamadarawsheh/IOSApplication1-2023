@@ -42,10 +42,11 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         EditButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: EditButton)
         
-        navigationItem.rightBarButtonItem = (
-            UIBarButtonItem(title: "Users", style: .done, target: self, action: #selector(backToUsers(sender:))
-                            
-                           ))
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        configureItems()
+        
     }
     
     @objc func goToEdit(sender: UIBarButtonItem) {
@@ -57,10 +58,7 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         
     }
     
-    @objc func backToUsers(sender: UIBarButtonItem) {
-        
-        self.tabBarController?.selectedIndex = 0
-    }
+  
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         

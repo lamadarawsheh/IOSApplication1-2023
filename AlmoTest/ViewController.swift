@@ -36,7 +36,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         
         tableView.dataSource = self
         tableView.delegate = self
-        
+        //        navigationItem.titleView = searchController.searchBar
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
         configureItems()
