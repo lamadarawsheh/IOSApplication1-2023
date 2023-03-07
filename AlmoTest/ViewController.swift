@@ -47,48 +47,42 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         }
     func configureItems(){
         
-        let moreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        let EditButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         
         let image = SingeltonUser.User.image
         
-        moreButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        moreButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        moreButton.layer.cornerRadius = moreButton.frame.width / 2
-        moreButton.clipsToBounds = true
-//        moreButton.layer.borderWidth = 1
-//        moreButton.layer.masksToBounds = false
-        
-//        moreButton.layer.borderColor = UIColor.black.cgColor
-//        moreButton.setImage(image, for: .normal)
-//        moreButton.setTitle(SingeltonUser.User.name, for: .normal)
-        moreButton.setBackgroundImage(image,for: .normal)
+        EditButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        EditButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        EditButton.layer.cornerRadius = EditButton.frame.width / 2
+        EditButton.clipsToBounds = true
+        EditButton.setBackgroundImage(image,for: .normal)
        
-        moreButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: moreButton)
+        EditButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: EditButton)
        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
-          super.viewWillAppear(animated)
-        print(SingeltonUser.User.name) //set this to desired view
-      }
+        configureItems()
+    
+    }
+  
     @objc func goToEdit(sender: UIBarButtonItem) {
-//        print("lama is here ")
-        let details  = self.storyboard?.instantiateViewController(identifier: "profile") as!   ProfileViewController
-//        details.user = users[0]
-      let vc = UINavigationController(rootViewController: details)
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
-//        self.navigationController?.pushViewController(details, animated: true)
+
+      let editProfile  = self.storyboard?.instantiateViewController(identifier: "profile") as!   ProfileViewController
+      let vc = UINavigationController(rootViewController: editProfile)
+      vc.modalPresentationStyle = .fullScreen
+      self.present(vc, animated: true, completion: nil)
+
             }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(SingeltonUser.User.name)
+    func scrollViewDidScroll(_ scrollView: UIScrollView)
+    {
+       
             self.searchController.searchBar.endEditing(true)
         
     }
-    func prr(){
-        print("hiiiiiii")
-    }
+  
     
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -130,16 +124,6 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
                 let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
                 details.user = users[indexPath.row]
                 self.navigationController?.pushViewController(details, animated: true)
-                
-//                if UIDevice.current.userInterfaceIdiom == .pad {
-//
-//                }
-//                else {
-//
-//                }
-//                details.user = users[indexPath.row]
-//                splitViewController?.showDetailViewController(details, sender: nil)
-                
             
             }
      

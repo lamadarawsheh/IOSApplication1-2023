@@ -17,7 +17,7 @@ class SingeltonUser{
     var image:UIImage = UIImage(systemName: "person.crop.circle.badge.plus")!
     
 
-    //Initializer access level change now
+    
     private init(){}
     
     func setuser(_ name:String,_ username:String, _ email:String ,_ address:String ,_ image:UIImage){

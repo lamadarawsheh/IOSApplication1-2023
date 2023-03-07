@@ -357,7 +357,7 @@
                                                                     <constraint firstAttribute="width" constant="230" id="kUd-69-4AE"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits" textContentType="email"/>
+                                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
                                                             </textField>
                                                         </subviews>
                                                     </stackView>
@@ -417,11 +417,12 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="addressTextField" destination="J2L-z8-rTo" id="F01-Ib-Cb6"/>
-                        <outlet property="emailTextField" destination="9xR-04-wQ7" id="Kk3-NF-Njp"/>
-                        <outlet property="imageIcon" destination="Wjz-Yt-STa" id="tit-bj-OwP"/>
-                        <outlet property="nameTextField" destination="V7x-HF-8Nb" id="ots-da-Tcj"/>
-                        <outlet property="usernameTextField" destination="0V2-nG-lQz" id="5Xc-St-lDC"/>
+                        <outlet property="addressTextField" destination="J2L-z8-rTo" id="gpf-gE-v44"/>
+                        <outlet property="emailTextField" destination="9xR-04-wQ7" id="nQ0-pF-1nt"/>
+                        <outlet property="imageIcon" destination="Wjz-Yt-STa" id="vLT-Bp-GSv"/>
+                        <outlet property="nameTextField" destination="V7x-HF-8Nb" id="4dx-Ua-Z0q"/>
+                        <outlet property="scrollview" destination="BQ8-Wc-9Mf" id="Zy3-fK-g8K"/>
+                        <outlet property="usernameTextField" destination="0V2-nG-lQz" id="tAu-yd-szY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wbh-YY-Vb8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -721,7 +722,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="32s-Nd-a6T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="46.564885496183201" y="817.6056338028169"/>
+            <point key="canvasLocation" x="-522" y="820"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="dnC-LB-mvK">
+            <objects>
+                <navigationController id="iq6-mp-W2O" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="T9f-pu-zz5"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nBM-xa-1fa">
+                        <rect key="frame" x="0.0" y="59" width="430" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Tkz-a0-8pb" kind="relationship" relationship="rootViewController" id="D3P-fL-MwS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Vn-Nf-GVh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="163" y="859"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="qdm-eO-vpA">
@@ -772,7 +790,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="la5-WS-mQp" kind="relationship" relationship="viewControllers" id="8iV-Nx-wPt"/>
-                        <segue destination="Tkz-a0-8pb" kind="relationship" relationship="viewControllers" id="Sa5-T8-lQT"/>
+                        <segue destination="iq6-mp-W2O" kind="relationship" relationship="viewControllers" id="K9H-GR-z5g"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KQk-rk-ZNS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1046,13 +1064,13 @@
         <!--Photos-->
         <scene sceneID="ZUV-K7-yCa">
             <objects>
-                <viewController storyboardIdentifier="profile2" title="Photos" id="Tkz-a0-8pb" customClass="ProfileViewController" customModule="AlmoTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="profile2" title="Photos" id="Tkz-a0-8pb" customClass="PhotoProfileViewController" customModule="AlmoTest" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xl7-s6-cAc">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AwJ-iQ-mg0">
-                                <rect key="frame" x="0.0" y="59" width="430" height="873"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="AwJ-iQ-mg0">
+                                <rect key="frame" x="0.0" y="103" width="430" height="829"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LjD-oc-PvC">
                                         <rect key="frame" x="0.0" y="0.0" width="430" height="830"/>
@@ -1076,7 +1094,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ahL-jG-UVZ">
+                                                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ahL-jG-UVZ">
                                                                 <rect key="frame" x="120" y="0.0" width="230" height="34"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="230" id="Iql-qd-79v"/>
@@ -1095,7 +1113,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7cJ-Fg-o4x">
+                                                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7cJ-Fg-o4x">
                                                                 <rect key="frame" x="120" y="0.0" width="230" height="34"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="230" id="IST-65-mO7"/>
@@ -1114,7 +1132,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username@gmail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3RM-gO-4hb">
+                                                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username@gmail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3RM-gO-4hb">
                                                                 <rect key="frame" x="120" y="0.0" width="230" height="34"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="230" id="6LG-7l-yph"/>
@@ -1133,7 +1151,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="nablus-rafedia" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mtp-2e-w3v">
+                                                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="nablus-rafedia" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mtp-2e-w3v">
                                                                 <rect key="frame" x="120" y="0.0" width="230" height="34"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="230" id="mnt-05-3jf"/>
@@ -1180,12 +1198,15 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Photos" image="photo.artframe" catalog="system" id="Hoa-qA-ZEM"/>
+                    <navigationItem key="navigationItem" title="Photos" id="9Wi-Ht-mfd">
+                        <barButtonItem key="backBarButtonItem" title="Cancel" id="JsA-jh-NV7"/>
+                    </navigationItem>
                     <connections>
-                        <outlet property="addressTextField" destination="mtp-2e-w3v" id="Wat-cy-aO4"/>
-                        <outlet property="emailTextField" destination="3RM-gO-4hb" id="8ha-Mt-mIj"/>
-                        <outlet property="imageIcon" destination="jsL-yR-p0t" id="k8P-XD-Ldg"/>
-                        <outlet property="nameTextField" destination="ahL-jG-UVZ" id="Tpf-wL-2EV"/>
-                        <outlet property="usernameTextField" destination="7cJ-Fg-o4x" id="t7I-2A-GcU"/>
+                        <outlet property="addressTextField" destination="mtp-2e-w3v" id="ZO8-Dm-o4H"/>
+                        <outlet property="emailTextField" destination="3RM-gO-4hb" id="eIf-x8-ghh"/>
+                        <outlet property="imageIcon" destination="jsL-yR-p0t" id="sTI-E9-jxO"/>
+                        <outlet property="nameTextField" destination="ahL-jG-UVZ" id="4v3-FU-1mk"/>
+                        <outlet property="usernameTextField" destination="7cJ-Fg-o4x" id="HYe-dU-ZJg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gNI-i4-htq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
