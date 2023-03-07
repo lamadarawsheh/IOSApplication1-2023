@@ -68,18 +68,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     
     
     @objc func keyboardDidShow(notification: Notification) {
+        let activeField = view
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: view.frame.origin.y + 200 , right: 0.0)
+        scrollview.contentInset = contentInsets
+        scrollview.scrollIndicatorInsets = contentInsets
+        let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
+        scrollview.scrollRectToVisible(activeRect, animated: true)
         
-        
-        //
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print (keyboardSize.height)
-            let activeField = view
-            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
-            scrollview.contentInset = contentInsets
-            scrollview.scrollIndicatorInsets = contentInsets
-            let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
-            scrollview.scrollRectToVisible(activeRect, animated: true)
-        }
     }
     
     @objc func keyboardWillBeHidden(notification: Notification) {

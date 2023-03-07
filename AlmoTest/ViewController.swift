@@ -36,8 +36,10 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         
         tableView.dataSource = self
         tableView.delegate = self
-        //        navigationItem.titleView = searchController.searchBar
-        navigationItem.searchController = searchController
+        navigationItem.titleView = searchController.searchBar
+        
+        searchController.hidesNavigationBarDuringPresentation = false
+        
         searchController.searchResultsUpdater = self
         configureItems()
         
