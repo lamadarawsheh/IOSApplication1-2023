@@ -17,12 +17,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
     let defaultImage:UIImage = UIImage(named: "profile")!
-    var isNameEdited:Bool = false
-    var isUserNameEdited:Bool = false
-    var isEmailEdited:Bool = false
     
     let imagePickerController = UIImagePickerController()
-    
+    let profileViewModel = ProfileViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         setImages()
@@ -59,10 +56,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         editIcon.layer.masksToBounds = false
         editIcon.layer.cornerRadius = editIcon.frame.size.width/2
         editIcon.clipsToBounds = true
-        
-        
-        
-        
         
     }
     
@@ -145,56 +138,21 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     func textFieldDidChangeSelection(_ textField: UITextField) {
         if(textField == self.nameTextField)
         {
-            print ("lllll")
-            if(!self.nameTextField.text!.isEmpty)
-            {
-                isNameEdited = true
-                
-            }
-            else
-            {
-                isNameEdited = false
-            }
-            print ("name")
-            print(isNameEdited)
+            profileViewModel.checkNameField(self.nameTextField.text!)
         }
         else if(textField == self.usernameTextField)
         {
-            if(!self.usernameTextField.text!.isEmpty)
-            {
-                isUserNameEdited = true
-                
-            }
-            else
-            {
-                isUserNameEdited = false
-            }
-            print ("uname")
-            print(isUserNameEdited)
+            profileViewModel.checkUserNameField(self.usernameTextField.text!)
+            
         }
         else if(textField == self.emailTextField)
         {
-            if(!self.emailTextField.text!.isEmpty)
-            {
-                isEmailEdited = true
-                
-            }
-            else
-            {
-                isEmailEdited = false
-            }
-            print ("em")
-            print(isEmailEdited)
-        }
-        
-        if(isNameEdited == true && isUserNameEdited == true && isEmailEdited == true)
-        {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-        else {
-            navigationItem.rightBarButtonItem?.isEnabled = false
+            profileViewModel.checkEmailField(self.emailTextField.text!)
             
         }
+        
+        
+        navigationItem.rightBarButtonItem?.isEnabled = profileViewModel.saveButtonEnabeled()
         
     }
     
@@ -221,7 +179,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         
         let firstAction: UIAlertAction = UIAlertAction(title: "Pick Photo", style: .default) { [self] action -> Void in
             
-            let tappedImage = tapGestureRecognizer.view as! UIImageView
+            _ = tapGestureRecognizer.view as! UIImageView
             imagePickerController.allowsEditing = false
             imagePickerController.sourceType = .photoLibrary
             imagePickerController.delegate = self

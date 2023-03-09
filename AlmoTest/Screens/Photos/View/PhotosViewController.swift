@@ -11,16 +11,12 @@ import SDWebImage
 
 class PhotosViewController: UIViewController ,UICollectionViewDataSource,UICollectionViewDelegate{
     @IBOutlet weak var collectionView:UICollectionView!
-//mv
-//    var photos:[Photo] = []
-//    var secPhotos:[Int:[Photo]] = [:]
-//    private let requestHandler =  RequestsHandler()
-    //mv
+    
     var photosListViewModel = PhotosViewModel()
     override func viewDidLoad() {
         initViewModel()
         super.viewDidLoad()
-//        excuteRequest()
+        
         configureItems()
         
         // Do any additional setup after loading the view.
@@ -53,7 +49,7 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         EditButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: EditButton)
         
-
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         configureItems()
@@ -69,7 +65,7 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         
     }
     
-  
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -95,24 +91,7 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         
         return cell
     }
-    //vm
-//    func excuteRequest()  {
-//
-//        requestHandler.getPhotos(completionHandler: {
-//            (r)-> Void  in
-//
-//            self.photos = r
-//
-//            self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-//
-//            self.collectionView.reloadData()
-//
-//        })
-//
-//
-//
-//    }
-    //mv
+    
 }
 extension PhotosViewController:UICollectionViewDelegateFlowLayout{
     

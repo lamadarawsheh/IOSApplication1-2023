@@ -13,13 +13,19 @@ class UserListViewModel {
     var isSearching:Bool = false
     private let requestHandler =  RequestsHandler()
     var reloadTableView: (()->())?
+    var updateLabel: (()->())?
     
-    private var cellViewModels: [UserCellModel] = [UserCellModel]() {
+    private var usersCells: [UserClass] = [UserClass]() {
         didSet {
             self.reloadTableView?()
         }
     }
-
+    var notFoundLabelisHidden:Bool? = nil {
+        didSet {
+            self.updateLabel?()
+        }
+    }
+    
     func fetchUsers(){
         
         requestHandler.getUsers(completionHandler: {
@@ -34,26 +40,23 @@ class UserListViewModel {
     }
     func createCell(users: [UserClass]){
         self.users = users
-        var vms = [UserCellModel]()
+        var vms = [UserClass]()
         for user in users {
-            vms.append(UserCellModel(user: user))
+            vms.append(user)
         }
-        cellViewModels = vms
+        usersCells = vms
     }
     
     var numberOfCells: Int {
-        
-        
-        
         if (filteredUsers.isEmpty && isSearching == false)
         {
-//            return self.users.count
-            return cellViewModels.count
+            
+            return usersCells.count
         }
         
         else if (filteredUsers.isEmpty && isSearching == true)
         {
-            return 1
+            return 0
         }
         else
         {
@@ -61,28 +64,48 @@ class UserListViewModel {
         }
         
     }
-
-    func getCellViewModel( at indexPath: IndexPath ) -> UserCellModel {
-        return cellViewModels[indexPath.row]
+    
+    
+    func getUserCellInfo( at indexPath: IndexPath ) -> UserClass {
+        if (filteredUsers.isEmpty && isSearching == false)
+        {
+            
+            return usersCells[indexPath.row]
+            
+        }
+        else
+        {
+            return filteredUsers[indexPath.row]
+            
+        }
+        
     }
     func updateSearchResults(_ text:String){
         filteredUsers.removeAll()
         
-            if !(text.isEmpty)
+        if !(text.isEmpty)
+        {
+            filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
+            isSearching = true
+            if (filteredUsers.isEmpty)
             {
-                filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
-                isSearching = true
+                notFoundLabelisHidden = false
             }
-            else
-            {
-                isSearching = false
+            else {
+                notFoundLabelisHidden = true
             }
-            
-            self.reloadTableView!()
+        }
+        else
+        {
+            isSearching = false
+            notFoundLabelisHidden = true
+        }
+        
+        self.reloadTableView!()
         
         
         
     }
- 
+    
     
 }

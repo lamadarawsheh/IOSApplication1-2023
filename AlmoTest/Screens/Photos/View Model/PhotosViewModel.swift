@@ -14,7 +14,7 @@ class PhotosViewModel {
     
     var reloadcollectionView: (()->())?
     
-    private var cellViewModels: [PhotoCellModel] = [PhotoCellModel]() {
+    private var photosCells: [Photo] = [Photo]() {
         didSet {
             self.reloadcollectionView?()
         }
@@ -24,56 +24,23 @@ class PhotosViewModel {
         requestHandler.getPhotos(completionHandler: {
             (r)-> Void  in
             
-            
-            
             self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
             self.createCell(photos: r)
             self.reloadcollectionView!()
             
         })
         
-        
-        
     }
     
- 
+    
     func createCell(photos: [Photo]){
         self.photos = photos
-        var vms = [PhotoCellModel]()
+        var vms = [Photo]()
         for photo in photos {
-            vms.append(PhotoCellModel(photo: photo))
+            vms.append(photo)
         }
         self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-        cellViewModels = vms
+        photosCells = vms
     }
-    
-    
-//    var numberOfCells: Int {
-//
-//
-//
-//        if (filteredUsers.isEmpty && isSearching == false)
-//        {
-////            return self.users.count
-//            return cellViewModels.count
-//        }
-//
-//        else if (filteredUsers.isEmpty && isSearching == true)
-//        {
-//            return 1
-//        }
-//        else
-//        {
-//            return self.filteredUsers.count
-//        }
-//
-//    }
-
-    func getCellViewModel( at indexPath: IndexPath ) -> PhotoCellModel {
-        return cellViewModels[indexPath.row]
-    }
-    
-
- 
     
 }

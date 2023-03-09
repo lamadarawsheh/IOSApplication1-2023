@@ -11,7 +11,7 @@ import MapKit
 class CustomDetailsViewController: UIViewController {
     
     var user:UserClass? = nil
-
+    
     @IBOutlet weak var usernameTextView: UITextView!
     
     @IBOutlet weak var emailTextView: UITextView!
@@ -27,10 +27,33 @@ class CustomDetailsViewController: UIViewController {
     var detailsViewModel = DetailsViewModel()
     
     override func viewDidLoad() {
-       
-//        initViewModel()
+        
         super.viewDidLoad()
-
+        
+        setImage()
+        
+        if let User = user{
+            title = (User.u.name)+" details"
+            usernameTextView.text = User.u.username
+            emailTextView.text = User.u.email
+            phoneTextView.text = User.u.phone
+            
+            addressTextView.text = detailsViewModel.getAddress()
+            
+            let  initialLoc = CLLocation(latitude:detailsViewModel.getLat() , longitude: detailsViewModel.getLng() )
+            
+            setStartingLocation(location: initialLoc ,distance:1000)
+            addAnnotation(detailsViewModel.getLat() ,detailsViewModel.getLng() , User.u.name)
+            
+        }
+        
+        
+        
+        
+    }
+    
+    
+    func setImage(){
         self.imageIcon.layer.borderWidth = 1.0
         self.imageIcon.layer.masksToBounds = false
         self.imageIcon.layer.borderColor = UIColor.blue.cgColor
@@ -38,39 +61,8 @@ class CustomDetailsViewController: UIViewController {
         imageIcon.image = image
         imageIcon.layer.cornerRadius = imageIcon.frame.size.width/2
         self.imageIcon.clipsToBounds = true
-        
-        if let User = user{
-            title = (User.u.name)+" details"
-            usernameTextView.text = User.u.username
-            emailTextView.text = User.u.email
-            phoneTextView.text = User.u.phone
-        
-            addressTextView.text = User.u.address.city + "\n" + User.u.address.street + "\n" + User.u.address.suite + "\n" + User.u.address.zipcode
-            
-             let lng = User.u.address.geo.lng
-                
-            let lat = User.u.address.geo.lat
-            let doublelng:Double = Double(lng)!
-            let doublelat:Double = Double(lat)!
-            let  initialLoc = CLLocation(latitude:doublelat , longitude: doublelng )
-            setStartingLocation(location: initialLoc ,distance:1000)
-            addAnnotation(doublelat ,doublelng , User.u.name)
-
-        }
-
-        
-      
-        
     }
-//    func initViewModel(){
-//        detailsViewModel.setUser = {
-//            DispatchQueue.main.async { detailsViewModel. }
-//        }
-//        
-////        detailsViewModel.fetchUsers()
-//    }
     
-
     func setStartingLocation(location:CLLocation,distance:CLLocationDistance){
         
         let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)

@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var usernameLabel: UILabel!
@@ -26,9 +26,9 @@ class CustomTableViewCell: UITableViewCell {
             
         }
     }
-   
     
-   
+    
+    
     
     func setImage(){
         
@@ -44,7 +44,7 @@ class CustomTableViewCell: UITableViewCell {
         
         
     }
-
+    
     
     
 }
