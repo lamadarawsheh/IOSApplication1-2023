@@ -8,13 +8,12 @@
 import Foundation
 
 class PhotosViewModel {
-    var photos:[Photo] = []
     var secPhotos:[Int:[Photo]] = [:]
     private let requestHandler =  RequestsHandler()
     
     var reloadcollectionView: (()->())?
     
-    private var photosCells: [Photo] = [Photo]() {
+    var photos: [Photo] = [Photo]() {
         didSet {
             self.reloadcollectionView?()
         }
@@ -23,24 +22,15 @@ class PhotosViewModel {
         
         requestHandler.getPhotos(completionHandler: {
             (r)-> Void  in
-            
+            self.photos = r
             self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-            self.createCell(photos: r)
-            self.reloadcollectionView!()
+            self.reloadcollectionView?()
             
         })
         
     }
     
     
-    func createCell(photos: [Photo]){
-        self.photos = photos
-        var vms = [Photo]()
-        for photo in photos {
-            vms.append(photo)
-        }
-        self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-        photosCells = vms
-    }
+    
     
 }

@@ -13,48 +13,18 @@ class ProfileViewModel {
     var isEmailEdited:Bool = false
     
     func checkNameField (_ text:String){
-        if(!text.isEmpty)
-        {
-            isNameEdited = true
-            
-        }
-        else
-        {
-            isNameEdited = false
-        }
+        isNameEdited = !text.isEmpty
     }
     func checkUserNameField (_ text:String){
-        if(!text.isEmpty)
-        {
-            isUserNameEdited = true
-            
-        }
-        else
-        {
-            isUserNameEdited = false
-        }
+        isUserNameEdited = !text.isEmpty
         
     }
     func checkEmailField (_ text:String){
-        if(!text.isEmpty)
-        {
-            isEmailEdited = true
-            
-        }
-        else
-        {
-            isEmailEdited = false
-        }
+        isEmailEdited = !text.isEmpty
         
     }
     func saveButtonEnabeled()->Bool{
-        if(isNameEdited == true && isUserNameEdited == true && isEmailEdited == true)
-        { return true
-        }
-        else {
-            return false
-        }
-        
+        return (isNameEdited == true && isUserNameEdited == true && isEmailEdited == true)
     }
     
     

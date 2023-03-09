@@ -14,12 +14,10 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
     
     var photosListViewModel = PhotosViewModel()
     override func viewDidLoad() {
-        initViewModel()
+        
         super.viewDidLoad()
-        
+        initViewModel()
         configureItems()
-        
-        // Do any additional setup after loading the view.
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.collectionViewLayout = UICollectionViewFlowLayout()
@@ -68,21 +66,19 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return photosListViewModel.secPhotos[section+1]!.count
-        
-        
     }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return photosListViewModel.secPhotos.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! photosCollectionViewCell
         
         let photos = photosListViewModel.secPhotos[indexPath.section+1]
         
         cell.label.text = String( photos![indexPath.row].ph.title)
-        print (  photos![indexPath.row].ph.albumId)
         
         let url = URL(string: photos![indexPath.row].ph.thumbnailUrl)!
         cell.imageIcon.sd_imageIndicator = SDWebImageActivityIndicator.gray

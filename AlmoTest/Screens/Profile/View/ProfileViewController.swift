@@ -17,9 +17,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
     let defaultImage:UIImage = UIImage(named: "profile")!
-    
     let imagePickerController = UIImagePickerController()
     let profileViewModel = ProfileViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setImages()
@@ -67,7 +67,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         scrollview.scrollIndicatorInsets = contentInsets
         let activeRect = activeField!.convert(activeField!.bounds, to: scrollview)
         scrollview.scrollRectToVisible(activeRect, animated: true)
-        
     }
     
     @objc func keyboardWillBeHidden(notification: Notification) {
@@ -78,7 +77,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        
         switchBasedNextTextField(textField)
         return true
     }
@@ -127,30 +125,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
             UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelTapped(sender:))
                             
                            ))
-        if(!SingeltonUser.User.name.isEmpty){
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-        else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
+        navigationItem.rightBarButtonItem?.isEnabled = !SingeltonUser.User.name.isEmpty
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        if(textField == self.nameTextField)
+        if textField == self.nameTextField
         {
             profileViewModel.checkNameField(self.nameTextField.text!)
         }
-        else if(textField == self.usernameTextField)
+        else if textField == self.usernameTextField
         {
             profileViewModel.checkUserNameField(self.usernameTextField.text!)
             
         }
-        else if(textField == self.emailTextField)
+        else if textField == self.emailTextField
         {
             profileViewModel.checkEmailField(self.emailTextField.text!)
             
         }
-        
         
         navigationItem.rightBarButtonItem?.isEnabled = profileViewModel.saveButtonEnabeled()
         
@@ -166,14 +158,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
     @objc func cancelTapped(sender: UIBarButtonItem)
     {
         self.dismiss(animated: true, completion: nil)
-        
     }
     
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
     {
-        
-        
         let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         
@@ -187,21 +176,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate &
         }
         
         let secondAction: UIAlertAction = UIAlertAction(title: "Delete Photo", style: .default) { [self] action -> Void in
-            
             imageIcon.image = self.defaultImage
             
         }
         
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in }
-        
-        
         actionSheetController.addAction(firstAction)
-        if(imageIcon.image != defaultImage){
+        
+        if imageIcon.image != defaultImage
+        {
             actionSheetController.addAction(secondAction)
         }
         
         actionSheetController.addAction(cancelAction)
-        
         actionSheetController.popoverPresentationController?.sourceView = view
         present(actionSheetController, animated: true) {
         }
