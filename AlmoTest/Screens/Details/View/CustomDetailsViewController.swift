@@ -24,9 +24,11 @@ class CustomDetailsViewController: UIViewController {
     
     @IBOutlet weak var imageIcon: UIImageView!
     
+    var detailsViewModel = DetailsViewModel()
+    
     override func viewDidLoad() {
        
-        
+//        initViewModel()
         super.viewDidLoad()
 
         self.imageIcon.layer.borderWidth = 1.0
@@ -60,6 +62,14 @@ class CustomDetailsViewController: UIViewController {
       
         
     }
+//    func initViewModel(){
+//        detailsViewModel.setUser = {
+//            DispatchQueue.main.async { detailsViewModel. }
+//        }
+//        
+////        detailsViewModel.fetchUsers()
+//    }
+    
 
     func setStartingLocation(location:CLLocation,distance:CLLocationDistance){
         

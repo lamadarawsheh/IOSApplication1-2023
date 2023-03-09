@@ -18,20 +18,25 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     
     @IBOutlet weak var userNotFoundLabel: UILabel!
     let searchController = UISearchController()
-    var users:[UserClass] = []
-    var filteredUsers:[UserClass] = []
-    var isSearching:Bool = false
-    let UserUrl:String = "users"
+    //vm
+//    var users:[UserClass] = []
+    //vm
+//    var filteredUsers:[UserClass] = []
+//    var isSearching:Bool = false
+    //vm
     var image:UIImage = SingeltonUser.User.image
+  
     @IBOutlet weak var mapView :MKMapView!
-    private let requestHandler =  RequestsHandler()
-    
-    
+    //vm
+//    private let requestHandler =  RequestsHandler()
+    //vm
+    var userListViewModel = UserListViewModel()
+
     
     override func viewDidLoad()  {
         
-        fetchUsers()
-        
+//        fetchUsers()
+        initViewModel()
         tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
         
         tableView.dataSource = self
@@ -43,10 +48,22 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         searchController.searchResultsUpdater = self
         configureItems()
         
-        self.tabBarController?.selectedIndex = 0
+//        self.tabBarController?.selectedIndex = 0
         super.viewDidLoad()
         
     }
+    func initViewModel(){
+        userListViewModel.reloadTableView = {
+            DispatchQueue.main.async { self.tableView.reloadData() }
+        }
+        
+        userListViewModel.fetchUsers()
+    }
+    
+    
+    
+    
+    
     func configureItems(){
         
         let EditButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -87,66 +104,75 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     
     
     func updateSearchResults(for searchController: UISearchController) {
-        
-        filteredUsers.removeAll()
-        
         if let text = searchController.searchBar.text{
-            
-            if !(text.isEmpty)
-            {
-                filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
-                isSearching = true
-            }
-            else
-            {
-                isSearching = false
-            }
-            
-            tableView.reloadData()
+            userListViewModel.updateSearchResults(text)
+//            tableView.reloadData()
         }
+//vm
+//        filteredUsers.removeAll()
+//
+//        if let text = searchController.searchBar.text{
+//
+//            if !(text.isEmpty)
+//            {
+//                filteredUsers = userListViewModel.users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
+//                isSearching = true
+//            }
+//            else
+//            {
+//                isSearching = false
+//            }
+//
+//            tableView.reloadData()
+//        }
+        //vm
     }
-    
-    func fetchUsers(){
-        
-        requestHandler.getUsers(completionHandler: {
-            (r)-> Void  in
-            
-            self.users = r
-            
-            self.tableView.reloadData()
-            
-        })
-        
-    }
-    
+    //vm
+//    func fetchUsers(){
+//
+//        requestHandler.getUsers(completionHandler: {
+//            (r)-> Void  in
+//
+//            self.users = r
+//
+//            self.tableView.reloadData()
+//
+//        })
+//
+//    }
+    //vm
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if (!(filteredUsers.isEmpty && isSearching == true))
-        {
+//        if (!(filteredUsers.isEmpty && isSearching == true))
+//        {
             let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
-            details.user = users[indexPath.row]
+        details
+            details.user = userListViewModel.users[indexPath.row]
+//            details.user = users[indexPath.row]
             self.navigationController?.pushViewController(details, animated: true)
             
-        }
+//        }
         
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
         
-        if (filteredUsers.isEmpty && isSearching == false)
-        {
-            return self.users.count
-        }
-        
-        else if (filteredUsers.isEmpty && isSearching == true)
-        {
-            return 1
-        }
-        else
-        {
-            return self.filteredUsers.count
-        }
+//        if (filteredUsers.isEmpty && isSearching == false)
+//        {
+////            return self.users.count
+//            return userListViewModel.numberOfCells
+//        }
+//
+//        else if (filteredUsers.isEmpty && isSearching == true)
+//        {
+//            return 1
+//        }
+//        else
+//        {
+//            return self.filteredUsers.count
+//        }
+        return userListViewModel.numberOfCells
         
     }
     
@@ -155,14 +181,20 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)as!
         CustomTableViewCell
         
-        if (filteredUsers.isEmpty && isSearching == false)
+        let cellVM = userListViewModel.getCellViewModel( at: indexPath )
+       
+       
+        
+        
+        if (userListViewModel.filteredUsers.isEmpty && userListViewModel.isSearching == false)
         {
-            cell.user = users[indexPath.row]
+//            cell.user = users[indexPath.row]
+            cell.user = cellVM.user
             cell.isHidden = false
             userNotFoundLabel.isHidden = true
             
         }
-        else if (filteredUsers.isEmpty && isSearching == true)
+        else if (userListViewModel.filteredUsers.isEmpty && userListViewModel.isSearching == true)
         {
             
             userNotFoundLabel.isHidden = false
@@ -172,7 +204,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         }
         else
         {
-            cell.user = filteredUsers[indexPath.row]
+            cell.user = userListViewModel.filteredUsers[indexPath.row]
             cell.isHidden = false
             userNotFoundLabel.isHidden = true
             
