@@ -6,12 +6,7 @@
 //
 
 import Foundation
-//
-//  User.swift
-//  AlmoTest
-//
-//  Created by Lama Darawsheh on 21/02/2023.
-//
+
 struct SecPhotos {
     var albumId:Int
     var photos:[Photo]

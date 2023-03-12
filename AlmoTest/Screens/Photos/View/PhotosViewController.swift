@@ -11,22 +11,27 @@ import SDWebImage
 
 class PhotosViewController: UIViewController ,UICollectionViewDataSource,UICollectionViewDelegate{
     @IBOutlet weak var collectionView:UICollectionView!
-    let PhotoUrl:String = "photos"
-    var photos:[Photo] = []
-    var secPhotos:[Int:[Photo]] = [:]
-    private let requestHandler =  RequestsHandler()
+    
+    var photosListViewModel = PhotosViewModel()
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        excuteRequest()
+        initViewModel()
         configureItems()
-        
-        // Do any additional setup after loading the view.
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.collectionViewLayout = UICollectionViewFlowLayout()
         
     }
+    
+    func initViewModel(){
+        photosListViewModel.reloadcollectionView = {
+            DispatchQueue.main.async { self.collectionView.reloadData() }
+        }
+        
+        photosListViewModel.excuteRequest()
+    }
+    
     func configureItems(){
         
         let EditButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -42,7 +47,7 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         EditButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: EditButton)
         
-
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         configureItems()
@@ -58,24 +63,22 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         
     }
     
-  
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return secPhotos[section+1]!.count
-        
-        
+        return photosListViewModel.secPhotos[section+1]!.count
     }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return secPhotos.count
+        return photosListViewModel.secPhotos.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! photosCollectionViewCell
         
-        let photos = secPhotos[indexPath.section+1]
+        let photos = photosListViewModel.secPhotos[indexPath.section+1]
         
         cell.label.text = String( photos![indexPath.row].ph.title)
-        print (  photos![indexPath.row].ph.albumId)
         
         let url = URL(string: photos![indexPath.row].ph.thumbnailUrl)!
         cell.imageIcon.sd_imageIndicator = SDWebImageActivityIndicator.gray
@@ -85,22 +88,6 @@ class PhotosViewController: UIViewController ,UICollectionViewDataSource,UIColle
         return cell
     }
     
-    func excuteRequest()  {
-        
-        requestHandler.getPhotos(completionHandler: {
-            (r)-> Void  in
-            
-            self.photos = r
-            
-            self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-            
-            self.collectionView.reloadData()
-            
-        })
-        
-        
-        
-    }
 }
 extension PhotosViewController:UICollectionViewDelegateFlowLayout{
     
@@ -112,7 +99,7 @@ extension PhotosViewController:UICollectionViewDelegateFlowLayout{
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "photoheader", for: indexPath)as! PhotoCollectionReusableView
-        let photos = secPhotos[indexPath.section+1]
+        let photos = photosListViewModel.secPhotos[indexPath.section+1]
         header.header.text = "Photos with Album Id = "+String( photos![indexPath.row].ph.albumId)
         
         
