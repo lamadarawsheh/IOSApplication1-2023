@@ -8,36 +8,36 @@
 import Foundation
 
 struct User: Codable {
-   let id: Int
+   var id: Int
    var name: String
-   let username: String
-   let email: String
-    let phone:String
-    let address:Address
-    let website:String
-    let company:Company
+   var username: String
+   var email: String
+    var phone:String
+    var address:Address
+    var website:String
+    var company:Company
     
    
 }
 struct Address:Codable{
-    let street:String
-    let suite:String
-    let city:String
-    let zipcode:String
-    let geo:Geo
+    var street:String
+    var suite:String
+    var city:String
+    var zipcode:String
+    var geo:Geo
     
     
 }
 struct Geo:Codable{
-    let lat:String
-    let lng:String
+    var lat:String
+    var lng:String
     
 }
 struct Company:Codable{
     
-    let name:String
-    let catchPhrase:String
-    let bs:String
+    var name:String
+    var catchPhrase:String
+    var bs:String
 }
 
 

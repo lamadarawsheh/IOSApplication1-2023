@@ -21,8 +21,11 @@ class PhotosViewModel {
     func excuteRequest()  {
         
         requestHandler.getPhotos(completionHandler: {
-            (r)-> Void  in
-            self.photos = r
+            (result)-> Void  in
+            for photo in result
+            {
+                self.photos.append(DataManager().savePhotos(photo))
+            }
             self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
             self.reloadcollectionView?()
             

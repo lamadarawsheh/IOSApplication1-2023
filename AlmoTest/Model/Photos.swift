@@ -13,11 +13,11 @@ struct SecPhotos {
 }
 
 struct Photos: Codable {
-    let albumId:Int
-    let id:Int
-   let title: String
-    let url:String
-   let thumbnailUrl: String
+    var albumId:Int
+    var id:Int
+   var title: String
+    var url:String
+   var thumbnailUrl: String
   
    
 }
