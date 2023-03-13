@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import CoreData
 
 
 class UserListViewModel {
@@ -27,14 +29,21 @@ class UserListViewModel {
     }
     
     func fetchUsers(){
+        
         requestHandler.getUsers(completionHandler: { [self]
-            (result)-> Void  in
-            for user in result
+            (succeeded,result)-> Void  in
+            if succeeded
             {
-                self.users.append(DataManager().saveUsers(user))
+                for user in result
+                {
+                    self.users.append(DataManager().saveUsers(user))
+                }
+                self.reloadTableView?()
             }
-            self.reloadTableView?()
-            
+            else
+            {
+                self.users = DataManager().fetchUsers()
+            }
         })
         
         

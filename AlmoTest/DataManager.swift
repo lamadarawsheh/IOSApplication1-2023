@@ -12,7 +12,8 @@ class DataManager{
     
     var user:UserClass? = nil
     var photo:Photo? = nil
-    
+    var savedUsers:[UserClass] = []
+    var savedPhotos:[Photo] = []
     func saveUsers(_ user : UserClass)->UserClass{
         let appDelegate =
         UIApplication.shared.delegate as? AppDelegate
@@ -135,7 +136,6 @@ class DataManager{
             
         }
         
-        
         return self.photo!
         
     }
@@ -193,7 +193,6 @@ class DataManager{
         let Photo:Photo = Photo(ph: photStruct)
         self.photo = Photo
         
-        
     }
     func setPhoto(_ managedObject:NSManagedObject ,_ photo:Photo)->NSManagedObject{
         managedObject.setValue(photo.ph.id, forKeyPath: "id")
@@ -203,6 +202,55 @@ class DataManager{
         
         
         return managedObject
+    }
+    func fetchUsers()->[UserClass]{
+        let appDelegate =
+        UIApplication.shared.delegate as? AppDelegate
+        
+        let managedContext =
+        appDelegate!.persistentContainer.viewContext
+        
+        let fetchRequest =
+        NSFetchRequest<NSManagedObject>(entityName: "SavedUsers")
+        
+        do {
+            let users = try managedContext.fetch(fetchRequest)
+            for user in users
+            {
+                convertUser(user)
+                savedUsers.append(self.user!)
+            }
+            
+            
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return savedUsers
+    }
+    
+    func fetchPhotos()->[Photo]{
+        let appDelegate =
+        UIApplication.shared.delegate as? AppDelegate
+        
+        let managedContext =
+        appDelegate!.persistentContainer.viewContext
+        
+        let fetchRequest =
+        NSFetchRequest<NSManagedObject>(entityName: "SavedPhotos")
+        
+        do {
+            let photos = try managedContext.fetch(fetchRequest)
+            for photo in photos
+            {
+                convertPhoto(photo)
+                savedPhotos.append(self.photo!)
+            }
+            
+            
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return savedPhotos
     }
     
     
