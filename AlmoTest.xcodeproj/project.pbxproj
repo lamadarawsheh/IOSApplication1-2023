@@ -15,6 +15,8 @@
 		752F176029A678B000FCC6E6 /* photosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F175F29A678B000FCC6E6 /* photosCollectionViewCell.swift */; };
 		752F176229A67D0300FCC6E6 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F176129A67D0300FCC6E6 /* PhotosViewController.swift */; };
 		752F176429A680B400FCC6E6 /* Photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752F176329A680B400FCC6E6 /* Photos.swift */; };
+		753D123A29BDB650006DFDA6 /* AlamoTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 753D123829BDB650006DFDA6 /* AlamoTest.xcdatamodeld */; };
+		753D123C29BF2097006DFDA6 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D123B29BF2097006DFDA6 /* DataManager.swift */; };
 		7546DE3929AB8FCC00208D7C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7546DE3829AB8FCC00208D7C /* Alamofire */; };
 		7546DE3C29AB906500208D7C /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7546DE3B29AB906500208D7C /* SDWebImage */; };
 		7546DE3E29AB906500208D7C /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7546DE3D29AB906500208D7C /* SDWebImageMapKit */; };
@@ -41,6 +43,8 @@
 		752F175F29A678B000FCC6E6 /* photosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = photosCollectionViewCell.swift; sourceTree = "<group>"; };
 		752F176129A67D0300FCC6E6 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		752F176329A680B400FCC6E6 /* Photos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
+		753D123929BDB650006DFDA6 /* AlamoTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AlamoTest.xcdatamodel; sourceTree = "<group>"; };
+		753D123B29BF2097006DFDA6 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		75A70BD629ACBCA100A0A443 /* CustomDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailsViewController.swift; sourceTree = "<group>"; };
 		75BEC48729B4D704004C7C8F /* SingeltonUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingeltonUser.swift; sourceTree = "<group>"; };
 		75BEC49B29B8D488004C7C8F /* UserListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewModel.swift; sourceTree = "<group>"; };
@@ -214,11 +218,13 @@
 		75F562F129A2B83C003A2E98 /* AlmoTest */ = {
 			isa = PBXGroup;
 			children = (
+				753D123829BDB650006DFDA6 /* AlamoTest.xcdatamodeld */,
 				75BEC49429B8B559004C7C8F /* Model */,
 				75BEC48B29B8B411004C7C8F /* Screens */,
 				75F562F229A2B83C003A2E98 /* AppDelegate.swift */,
 				75F562F429A2B83C003A2E98 /* SceneDelegate.swift */,
 				752F175529A3C4E900FCC6E6 /* RequestsHandler.swift */,
+				753D123B29BF2097006DFDA6 /* DataManager.swift */,
 				75F562F829A2B83C003A2E98 /* Main.storyboard */,
 				75F562FD29A2B83C003A2E98 /* LaunchScreen.storyboard */,
 				75F562FB29A2B83C003A2E98 /* Assets.xcassets */,
@@ -321,8 +327,10 @@
 				752F175829A4CA5900FCC6E6 /* User.swift in Sources */,
 				752F176029A678B000FCC6E6 /* photosCollectionViewCell.swift in Sources */,
 				75BEC4A829BA21AD004C7C8F /* ProfileViewModel.swift in Sources */,
+				753D123C29BF2097006DFDA6 /* DataManager.swift in Sources */,
 				75F562F529A2B83C003A2E98 /* SceneDelegate.swift in Sources */,
 				75254C1729AE4E7F0073160C /* PhotoCollectionReusableView.swift in Sources */,
+				753D123A29BDB650006DFDA6 /* AlamoTest.xcdatamodeld in Sources */,
 				752F176429A680B400FCC6E6 /* Photos.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,6 +586,19 @@
 			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		753D123829BDB650006DFDA6 /* AlamoTest.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				753D123929BDB650006DFDA6 /* AlamoTest.xcdatamodel */,
+			);
+			currentVersion = 753D123929BDB650006DFDA6 /* AlamoTest.xcdatamodel */;
+			path = AlamoTest.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 75F562E729A2B83C003A2E98 /* Project object */;
 }

@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import UIKit
+import CoreData
+
 
 class UserListViewModel {
     var filteredUsers:[UserClass] = []
@@ -27,14 +30,23 @@ class UserListViewModel {
     
     func fetchUsers(){
         
-        requestHandler.getUsers(completionHandler: {
-            (r)-> Void  in
-            
-            
-            self.users = r
-            self.reloadTableView?()
-            
+        requestHandler.getUsers(completionHandler: { [self]
+            (succeeded,result)-> Void  in
+            if succeeded
+            {
+                for user in result
+                {
+                    self.users.append(user)
+                    DataManager().saveUser(user)
+                }
+                self.reloadTableView?()
+            }
+            else
+            {
+                self.users = DataManager().fetchUsers()
+            }
         })
+        
         
     }
     
@@ -50,6 +62,7 @@ class UserListViewModel {
     
     
     func getUserCellInfo( at indexPath: IndexPath ) -> UserClass {
+        
         if filteredUsers.isEmpty && isSearching == false
         {
             return users[indexPath.row]
@@ -75,6 +88,5 @@ class UserListViewModel {
         
         
     }
-    
     
 }

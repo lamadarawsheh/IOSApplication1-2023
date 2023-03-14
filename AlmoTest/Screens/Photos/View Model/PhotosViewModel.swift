@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import CoreData
 
 class PhotosViewModel {
     var secPhotos:[Int:[Photo]] = [:]
@@ -20,12 +22,24 @@ class PhotosViewModel {
     }
     func excuteRequest()  {
         
+        
         requestHandler.getPhotos(completionHandler: {
-            (r)-> Void  in
-            self.photos = r
-            self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
-            self.reloadcollectionView?()
-            
+            (succeeded,result)-> Void  in
+            if succeeded
+            {
+                for photo in result
+                {
+                    self.photos.append(photo)
+                    DataManager().savePhoto(photo)
+                }
+                self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
+                self.reloadcollectionView?()
+            }
+            else {
+                self.photos = DataManager().fetchPhotos()
+                self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
+                self.reloadcollectionView?()
+            }
         })
         
     }
