@@ -29,7 +29,8 @@ class PhotosViewModel {
             {
                 for photo in result
                 {
-                    self.photos.append(DataManager().savePhotos(photo))
+                    self.photos.append(photo)
+                    DataManager().savePhoto(photo)
                 }
                 self.secPhotos = Dictionary(grouping: self.photos, by: \.ph.albumId)
                 self.reloadcollectionView?()

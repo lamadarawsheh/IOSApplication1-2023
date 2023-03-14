@@ -36,7 +36,8 @@ class UserListViewModel {
             {
                 for user in result
                 {
-                    self.users.append(DataManager().saveUsers(user))
+                    self.users.append(user)
+                    DataManager().saveUser(user)
                 }
                 self.reloadTableView?()
             }

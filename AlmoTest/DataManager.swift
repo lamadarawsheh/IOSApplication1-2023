@@ -10,11 +10,7 @@ import CoreData
 import UIKit
 class DataManager{
     
-    var user:UserClass? = nil
-    var photo:Photo? = nil
-    var savedUsers:[UserClass] = []
-    var savedPhotos:[Photo] = []
-    func saveUsers(_ user : UserClass)->UserClass{
+    func saveUser(_ user : UserClass){
         let appDelegate =
         UIApplication.shared.delegate as? AppDelegate
         
@@ -35,9 +31,9 @@ class DataManager{
                 // update
                 var managedObject = fetchResults[0]
                 
-                managedObject = setUser(managedObject, user)
+                managedObject = getManagedObjectFromUser(managedObject, user)
                 try managedContext.save()
-                convertUser(managedObject)
+               
             }
             else {
                 //insert
@@ -54,11 +50,11 @@ class DataManager{
                 var managedObject = NSManagedObject(entity: entity,
                                                     insertInto: managedContext)
                 
-                managedObject = setUser(managedObject , user)
+                managedObject = getManagedObjectFromUser(managedObject , user)
                 
                 do {
                     try managedContext.save()
-                    convertUser(managedObject)
+                    
                 } catch let error as NSError {
                     print("Could not save. \(error), \(error.userInfo)")
                 }
@@ -73,12 +69,12 @@ class DataManager{
         }
         
         
-        return self.user!
+       
         
     }
     
     
-    func savePhotos(_ photo : Photo)->Photo{
+    func savePhoto(_ photo : Photo){
         let appDelegate =
         UIApplication.shared.delegate as? AppDelegate
         
@@ -99,9 +95,9 @@ class DataManager{
                 // update
                 var managedObject = fetchResults[0]
                 
-                managedObject = setPhoto(managedObject, photo)
+                managedObject = getMnagedObjectFromPhoto(managedObject, photo)
                 try managedContext.save()
-                convertPhoto(managedObject)
+                
             }
             else {
                 //insert
@@ -118,11 +114,10 @@ class DataManager{
                 var managedObject = NSManagedObject(entity: entity,
                                                     insertInto: managedContext)
                 
-                managedObject = setPhoto(managedObject , photo)
+                managedObject = getMnagedObjectFromPhoto(managedObject , photo)
                 
                 do {
                     try managedContext.save()
-                    convertPhoto(managedObject)
                 } catch let error as NSError {
                     print("Could not save. \(error), \(error.userInfo)")
                 }
@@ -136,11 +131,11 @@ class DataManager{
             
         }
         
-        return self.photo!
+       
         
     }
     
-    func convertUser(_ managedObject:NSManagedObject){
+    func getUserFromManagedObject(_ managedObject:NSManagedObject)->UserClass{
         
         let id = managedObject.value(forKeyPath: "id") as! Int
         let name = managedObject.value(forKeyPath: "name") as! String
@@ -157,12 +152,12 @@ class DataManager{
         let userStruct:User = User(id: id, name: name, username: username, email: email, phone: phone, address: Address(street: street, suite: suite, city: city, zipcode: zipcode, geo: Geo(lat: lat, lng: lng)), website: "", company: Company(name: "", catchPhrase: "", bs: ""))
         
         
-        let User:UserClass = UserClass(u: userStruct)
-        user = User
+        let user:UserClass = UserClass(u: userStruct)
+        return user
         
         
     }
-    func setUser(_ managedObject:NSManagedObject ,_ user:UserClass)->NSManagedObject{
+    func getManagedObjectFromUser(_ managedObject:NSManagedObject ,_ user:UserClass)->NSManagedObject{
         managedObject.setValue(user.u.name, forKeyPath: "name")
         managedObject.setValue(user.u.username, forKeyPath: "username")
         managedObject.setValue(user.u.email, forKeyPath: "email")
@@ -180,7 +175,7 @@ class DataManager{
     }
     
     
-    func convertPhoto(_ managedObject:NSManagedObject){
+    func getPhotoFromManagedObject(_ managedObject:NSManagedObject)->Photo{
         
         let id = managedObject.value(forKeyPath: "id") as! Int
         let title = managedObject.value(forKeyPath: "title") as! String
@@ -188,13 +183,13 @@ class DataManager{
         let thumbnailUrl = managedObject.value(forKeyPath: "thumbnailUrl") as! String
         
         
-        let photStruct:Photos = Photos(albumId: albumId, id: id, title: title, url: "", thumbnailUrl: thumbnailUrl)
+        let photoStruct:Photos = Photos(albumId: albumId, id: id, title: title, url: "", thumbnailUrl: thumbnailUrl)
         
-        let Photo:Photo = Photo(ph: photStruct)
-        self.photo = Photo
+        let photo:Photo = Photo(ph: photoStruct)
+        return photo
         
     }
-    func setPhoto(_ managedObject:NSManagedObject ,_ photo:Photo)->NSManagedObject{
+    func getMnagedObjectFromPhoto(_ managedObject:NSManagedObject ,_ photo:Photo)->NSManagedObject{
         managedObject.setValue(photo.ph.id, forKeyPath: "id")
         managedObject.setValue(photo.ph.albumId, forKeyPath: "albumId")
         managedObject.setValue(photo.ph.title, forKeyPath: "title")
@@ -204,6 +199,7 @@ class DataManager{
         return managedObject
     }
     func fetchUsers()->[UserClass]{
+        var savedUsers:[UserClass] = []
         let appDelegate =
         UIApplication.shared.delegate as? AppDelegate
         
@@ -217,8 +213,7 @@ class DataManager{
             let users = try managedContext.fetch(fetchRequest)
             for user in users
             {
-                convertUser(user)
-                savedUsers.append(self.user!)
+                savedUsers.append(getUserFromManagedObject(user))
             }
             
             
@@ -229,6 +224,7 @@ class DataManager{
     }
     
     func fetchPhotos()->[Photo]{
+        var savedPhotos:[Photo] = []
         let appDelegate =
         UIApplication.shared.delegate as? AppDelegate
         
@@ -242,8 +238,7 @@ class DataManager{
             let photos = try managedContext.fetch(fetchRequest)
             for photo in photos
             {
-                convertPhoto(photo)
-                savedPhotos.append(self.photo!)
+                savedPhotos.append(getPhotoFromManagedObject(photo))
             }
             
             
