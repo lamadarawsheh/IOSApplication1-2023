@@ -17,59 +17,69 @@ class DataManager{
         let managedContext =
         appDelegate!.persistentContainer.viewContext
         
-        let fetchRequest =
-        NSFetchRequest<NSManagedObject>(entityName: "SavedUsers")
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateMOC.parent = managedContext
         
-        
-        fetchRequest.predicate = NSPredicate(format: "id == %@", String(user.u.id))
-        
-        
-        do {
-            let fetchResults = try managedContext.fetch(fetchRequest)
-            if fetchResults.count != 0 {
-                
-                // update
-                var managedObject = fetchResults[0]
-                
-                managedObject = getManagedObjectFromUser(managedObject, user)
-                try managedContext.save()
-               
-            }
-            else {
-                //insert
-                let appDelegate =
-                UIApplication.shared.delegate as? AppDelegate
-                
-                let managedContext =
-                appDelegate!.persistentContainer.viewContext
-                
-                let entity =
-                NSEntityDescription.entity(forEntityName: "SavedUsers",
-                                           in: managedContext)!
-                
-                var managedObject = NSManagedObject(entity: entity,
-                                                    insertInto: managedContext)
-                
-                managedObject = getManagedObjectFromUser(managedObject , user)
-                
-                do {
-                    try managedContext.save()
+        privateMOC.perform { [self] in
+            let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "SavedUsers")
+            
+            
+            fetchRequest.predicate = NSPredicate(format: "id == %@", String(user.u.id))
+            
+            
+            do {
+                let fetchResults = try privateMOC.fetch(fetchRequest)
+                if fetchResults.count != 0 {
                     
-                } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
+                    // update
+                    var managedObject = fetchResults[0]
+                    
+                    managedObject = getManagedObjectFromUser(managedObject, user)
+                    try privateMOC.save()
+                    
+                }
+                else {
+                    //insert
+                    let appDelegate =
+                    UIApplication.shared.delegate as? AppDelegate
+                    
+                    let managedContext =
+                    appDelegate!.persistentContainer.viewContext
+                    
+                    let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    privateMOC.parent = managedContext
+                    
+                    privateMOC.perform { [self] in
+                        
+                        let entity =
+                        NSEntityDescription.entity(forEntityName: "SavedUsers",
+                                                   in: privateMOC)!
+                        
+                        var managedObject = NSManagedObject(entity: entity,
+                                                            insertInto: privateMOC)
+                        
+                        managedObject = getManagedObjectFromUser(managedObject , user)
+                        
+                        do {
+                            try privateMOC.save()
+                            
+                        } catch let error as NSError {
+                            print("Could not save. \(error), \(error.userInfo)")
+                        }
+                        
+                        
+                    }
                 }
                 
                 
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+                
             }
             
             
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            
         }
-        
-        
-       
         
     }
     
@@ -81,57 +91,67 @@ class DataManager{
         let managedContext =
         appDelegate!.persistentContainer.viewContext
         
-        let fetchRequest =
-        NSFetchRequest<NSManagedObject>(entityName: "SavedPhotos")
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateMOC.parent = managedContext
         
-        
-        fetchRequest.predicate = NSPredicate(format: "id == %@", String(photo.ph.id))
-        
-        
-        do {
-            let fetchResults = try managedContext.fetch(fetchRequest)
-            if fetchResults.count != 0 {
-                
-                // update
-                var managedObject = fetchResults[0]
-                
-                managedObject = getMnagedObjectFromPhoto(managedObject, photo)
-                try managedContext.save()
-                
-            }
-            else {
-                //insert
-                let appDelegate =
-                UIApplication.shared.delegate as? AppDelegate
-                
-                let managedContext =
-                appDelegate!.persistentContainer.viewContext
-                
-                let entity =
-                NSEntityDescription.entity(forEntityName: "SavedPhotos",
-                                           in: managedContext)!
-                
-                var managedObject = NSManagedObject(entity: entity,
-                                                    insertInto: managedContext)
-                
-                managedObject = getMnagedObjectFromPhoto(managedObject , photo)
-                
-                do {
-                    try managedContext.save()
-                } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
+        privateMOC.perform { [self] in
+            let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "SavedPhotos")
+            
+            
+            fetchRequest.predicate = NSPredicate(format: "id == %@", String(photo.ph.id))
+            
+            
+            do {
+                let fetchResults = try privateMOC.fetch(fetchRequest)
+                if fetchResults.count != 0 {
+                    
+                    // update
+                    var managedObject = fetchResults[0]
+                    
+                    managedObject = getMnagedObjectFromPhoto(managedObject, photo)
+                    try privateMOC.save()
+                    
+                }
+                else {
+                    
+                    //insert
+                    let appDelegate =
+                    UIApplication.shared.delegate as? AppDelegate
+                    
+                    let managedContext =
+                    appDelegate!.persistentContainer.viewContext
+                    
+                    let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    privateMOC.parent = managedContext
+                    
+                    privateMOC.perform { [self] in
+                        
+                        let entity =
+                        NSEntityDescription.entity(forEntityName: "SavedPhotos",
+                                                   in: privateMOC)!
+                        
+                        var managedObject = NSManagedObject(entity: entity,
+                                                            insertInto: privateMOC)
+                        
+                        managedObject = getMnagedObjectFromPhoto(managedObject , photo)
+                        
+                        do {
+                            try privateMOC.save()
+                        } catch let error as NSError {
+                            print("Could not save. \(error), \(error.userInfo)")
+                        }
+                        
+                        
+                    }
                 }
                 
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
                 
             }
             
-            
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            
         }
-        
-       
         
     }
     
