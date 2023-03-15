@@ -8,16 +8,16 @@
 import Foundation
 
 struct User: Codable {
-   var id: Int
-   var name: String
-   var username: String
-   var email: String
+    var id: Int
+    var name: String
+    var username: String
+    var email: String
     var phone:String
     var address:Address
     var website:String
     var company:Company
     
-   
+    
 }
 struct Address:Codable{
     var street:String
@@ -46,10 +46,11 @@ struct Company:Codable{
 
 
 class UserClass {
-
-    var u:User
     
+    var u:User
+    var isFavorite:Bool
     init(u: User) {
         self.u = u
+        isFavorite = false
     }
 }

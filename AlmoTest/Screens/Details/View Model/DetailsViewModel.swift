@@ -28,8 +28,8 @@ class DetailsViewModel{
         return doublelat
     }
     func isfavourite()->Bool{
-        let result = userListViewModel?.favoriteUsers.first(where: {$0.u.id == user!.u.id})
-        return result != nil
+        let result = userListViewModel?.users.first(where: {$0.u.id == user!.u.id})
+        return result!.isFavorite
     }
     func addToFavorite(){
         userListViewModel?.addToFavorite(user!)

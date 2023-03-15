@@ -12,7 +12,6 @@ import CoreData
 
 class UserListViewModel {
     var filteredUsers:[UserClass] = []
-    var favoriteUsers:[UserClass] = []
     var backUpUsers:[UserClass] = []
     var isSearching:Bool = false
     private let requestHandler =  RequestsHandler()
@@ -80,13 +79,11 @@ class UserListViewModel {
     func isfavorite(at indexPath: IndexPath)->Bool{
         if filteredUsers.isEmpty && isSearching == false
         {
-            let result = favoriteUsers.first(where: {$0.u.id == users[indexPath.row].u.id})
-            return result != nil
+            return users[indexPath.row].isFavorite
         }
         else
         {
-            let result = favoriteUsers.first(where: {$0.u.id == filteredUsers[indexPath.row].u.id})
-            return result != nil
+            return filteredUsers[indexPath.row].isFavorite
             
         }
         
@@ -107,12 +104,12 @@ class UserListViewModel {
         
     }
     func addToFavorite(_ user:UserClass){
-        favoriteUsers.append(user)
-        
+        let result = users.first(where: {$0.u.id == user.u.id})
+        result?.isFavorite = true
     }
     func removeFromFavorite(_ user:UserClass){
-        let index = favoriteUsers.firstIndex(where: {$0.u.id == user.u.id})
-        favoriteUsers.remove(at: index!)
+        let result = users.first(where: {$0.u.id == user.u.id})
+        result?.isFavorite = false
     }
     
     

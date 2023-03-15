@@ -61,7 +61,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     @IBAction func configurefavorites(){
         if favoriteSwitch.isOn
         {
-            userListViewModel.users = userListViewModel.favoriteUsers
+            userListViewModel.users = userListViewModel.users.filter({$0.isFavorite == true})
             tableView.reloadData()
         }
         else {
