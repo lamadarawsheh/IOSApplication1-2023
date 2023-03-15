@@ -12,6 +12,9 @@ class CustomDetailsViewController: UIViewController {
     
     var user:UserClass? = nil
     
+    
+    
+    @IBOutlet weak var favoriteImageView: UIImageView!
     @IBOutlet weak var usernameTextView: UITextView!
     
     @IBOutlet weak var emailTextView: UITextView!
@@ -32,7 +35,12 @@ class CustomDetailsViewController: UIViewController {
         
         setImage()
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(favoriteImageViewTapped(tapGestureRecognizer:)))
+        favoriteImageView.isUserInteractionEnabled = true
+        favoriteImageView.addGestureRecognizer(tapGestureRecognizer)
+        
         if let User = user{
+            setFavoriteImage()
             title = (User.u.name)+" details"
             usernameTextView.text = User.u.username
             emailTextView.text = User.u.email
@@ -51,7 +59,6 @@ class CustomDetailsViewController: UIViewController {
         
         
     }
-    
     
     func setImage(){
         self.imageIcon.layer.borderWidth = 1.0
@@ -76,5 +83,33 @@ class CustomDetailsViewController: UIViewController {
         mapKitView.addAnnotation(pin)
     }
     
-    
+    @objc func favoriteImageViewTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        if detailsViewModel.isfavourite()
+        {
+            favoriteImageView.image = UIImage(systemName: "star")
+            favoriteImageView.tintColor = .systemGray
+            detailsViewModel.removeFromFavorite()
+        }
+        else
+        {
+            favoriteImageView.image = UIImage(systemName: "star.fill")
+            favoriteImageView.tintColor = .systemYellow
+            detailsViewModel.addToFavorite()
+        }
+    }
+    func setFavoriteImage (){
+        if detailsViewModel.isfavourite()
+        {
+            favoriteImageView.image = UIImage(systemName: "star.fill")
+            favoriteImageView.tintColor = .systemYellow
+        }
+        else
+        {
+            favoriteImageView.image = UIImage(systemName: "star")
+            favoriteImageView.tintColor = .systemGray
+        }
+        
+        
+    }
 }

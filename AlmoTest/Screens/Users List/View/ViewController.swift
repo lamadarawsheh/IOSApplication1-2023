@@ -12,6 +12,8 @@ import MapKit
 
 class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSource,UISearchResultsUpdating{
     
+    
+    @IBOutlet weak var favoriteSwitch: UISwitch!
     @IBOutlet   var tableView :UITableView!
     @IBOutlet weak var userNotFoundLabel: UILabel!
     let searchController = UISearchController()
@@ -56,6 +58,18 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         }
         
     }
+    @IBAction func configurefavorites(){
+        if favoriteSwitch.isOn
+        {
+            userListViewModel.users = userListViewModel.favoriteUsers
+            tableView.reloadData()
+        }
+        else {
+            userListViewModel.users = userListViewModel.backUpUsers
+            tableView.reloadData()
+        }
+        
+    }
     
     
     
@@ -78,7 +92,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     
     override func viewWillAppear(_ animated: Bool) {
         configureItems()
-        
+        tableView.reloadData()
     }
     
     @objc func goToEdit(sender: UIBarButtonItem) {
@@ -112,6 +126,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         
         details.user = userListViewModel.users[indexPath.row]
         details.detailsViewModel.user = details.user
+        details.detailsViewModel.userListViewModel = userListViewModel
         self.navigationController?.pushViewController(details, animated: true)
         
     }
@@ -130,7 +145,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         let cellUserInfo = userListViewModel.getUserCellInfo( at: indexPath )
         
         cell.user = cellUserInfo
-        
+        cell.favoriteIcon.isHidden = !userListViewModel.isfavorite(at: indexPath)
         return cell
         
     }
