@@ -12,6 +12,9 @@ class CustomDetailsViewController: UIViewController {
     
     var user:UserClass? = nil
     
+    
+    @IBOutlet weak var favoriteButton: UIButton!
+    
     @IBOutlet weak var usernameTextView: UITextView!
     
     @IBOutlet weak var emailTextView: UITextView!
@@ -33,6 +36,7 @@ class CustomDetailsViewController: UIViewController {
         setImage()
         
         if let User = user{
+            setFavoriteButton()
             title = (User.u.name)+" details"
             usernameTextView.text = User.u.username
             emailTextView.text = User.u.email
@@ -51,7 +55,6 @@ class CustomDetailsViewController: UIViewController {
         
         
     }
-    
     
     func setImage(){
         self.imageIcon.layer.borderWidth = 1.0
@@ -76,5 +79,26 @@ class CustomDetailsViewController: UIViewController {
         mapKitView.addAnnotation(pin)
     }
     
-    
+    @IBAction func favoriteButtonTapped(_ sender: Any) {
+        detailsViewModel.toggleFavoriteState()
+        setFavoriteButton()
+        
+    }
+    func setFavoriteButton (){
+        favoriteButton.setTitle("", for: .normal)
+        
+        
+        if detailsViewModel.isfavourite()
+        {
+            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            favoriteButton.tintColor = .systemYellow
+        }
+        else
+        {
+            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+            favoriteButton.tintColor = .systemGray
+        }
+        
+        
+    }
 }

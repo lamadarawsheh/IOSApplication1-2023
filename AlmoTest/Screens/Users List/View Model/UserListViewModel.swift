@@ -12,6 +12,7 @@ import CoreData
 
 class UserListViewModel {
     var filteredUsers:[UserClass] = []
+    var switchState:Bool = false
     var isSearching:Bool = false
     private let requestHandler =  RequestsHandler()
     var reloadTableView: (()->())?
@@ -56,7 +57,7 @@ class UserListViewModel {
             return filteredUsers.count
         }
         else {
-            return users.count
+            return getUsers().count
         }
     }
     
@@ -65,7 +66,7 @@ class UserListViewModel {
         
         if filteredUsers.isEmpty && isSearching == false
         {
-            return users[indexPath.row]
+            return getUsers()[indexPath.row]
         }
         else
         {
@@ -74,12 +75,38 @@ class UserListViewModel {
         }
         
     }
+    func isfavorite(at indexPath: IndexPath)->Bool{
+        if filteredUsers.isEmpty && isSearching == false
+        {
+            return getUsers()[indexPath.row].isFavorite
+        }
+        else
+        {
+            return filteredUsers[indexPath.row].isFavorite
+            
+        }
+        
+    }
+    func getUsers()->[UserClass]
+    {
+        if switchState
+        {
+            return users.filter({$0.isFavorite == true})
+            
+        }
+        else {
+            return self.users
+        }
+        
+    }
+    
+    
     func updateSearchResults(_ text:String){
         filteredUsers.removeAll()
         isSearching = !text.isEmpty
         notFoundLabelisHidden = true
         if !text.isEmpty {
-            filteredUsers = users.filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
+            filteredUsers = getUsers().filter({ $0.u.name.localizedCaseInsensitiveContains(text) })
             notFoundLabelisHidden = !filteredUsers.isEmpty
         }
         
@@ -88,5 +115,11 @@ class UserListViewModel {
         
         
     }
+    func toggleFavoriteState(_ user:UserClass){
+        user.isFavorite = !user.isFavorite
+        DataManager().saveUser(user)
+    }
+    
+    
     
 }

@@ -10,6 +10,7 @@ import Foundation
 
 class DetailsViewModel{
     var user: UserClass? = nil
+    var userListViewModel:UserListViewModel? = nil
     func getAddress()->String{
         let address:String = user!.u.address.city + "\n" + user!.u.address.street + "\n" + user!.u.address.suite + "\n" + user!.u.address.zipcode
         return address
@@ -25,6 +26,13 @@ class DetailsViewModel{
         let lat = user!.u.address.geo.lat
         let doublelat = Double(lat)!
         return doublelat
+    }
+    func isfavourite()->Bool{
+        let result = userListViewModel?.users.first(where: {$0.u.id == user!.u.id})
+        return result!.isFavorite
+    }
+    func toggleFavoriteState(){
+        userListViewModel?.toggleFavoriteState(user!)
     }
     
     

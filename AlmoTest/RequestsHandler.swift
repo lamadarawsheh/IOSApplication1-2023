@@ -52,7 +52,7 @@ class RequestsHandler  {
                     
                 case .failure(_):
                     print("failure")
-                    completionHandler(false,[])
+                    completionHandler(false,self.users)
                 }
             }
         

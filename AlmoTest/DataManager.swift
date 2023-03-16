@@ -16,60 +16,62 @@ class DataManager{
         
         let managedContext =
         appDelegate!.persistentContainer.viewContext
-        
         let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         privateMOC.parent = managedContext
         
         privateMOC.perform { [self] in
+            
+            
             let fetchRequest =
             NSFetchRequest<NSManagedObject>(entityName: "SavedUsers")
             
-            
-            fetchRequest.predicate = NSPredicate(format: "id == %@", String(user.u.id))
-            
+            let predicate = NSPredicate(format: "id == %i", user.u.id)
+            fetchRequest.predicate = predicate
             
             do {
                 let fetchResults = try privateMOC.fetch(fetchRequest)
+                
                 if fetchResults.count != 0 {
-                    
                     // update
                     var managedObject = fetchResults[0]
                     
                     managedObject = getManagedObjectFromUser(managedObject, user)
                     try privateMOC.save()
+                    managedContext.performAndWait {
+                        do {
+                            try managedContext.save()
+                        } catch {
+                            fatalError("Failure to save context: \(error)")
+                        }
+                    }
                     
                 }
                 else {
+                    
                     //insert
-                    let appDelegate =
-                    UIApplication.shared.delegate as? AppDelegate
+                    let entity =
+                    NSEntityDescription.entity(forEntityName: "SavedUsers",
+                                               in: privateMOC)!
                     
-                    let managedContext =
-                    appDelegate!.persistentContainer.viewContext
+                    var managedObject = NSManagedObject(entity: entity,
+                                                        insertInto: privateMOC)
                     
-                    let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-                    privateMOC.parent = managedContext
+                    managedObject = getManagedObjectFromUser(managedObject , user)
                     
-                    privateMOC.perform { [self] in
-                        
-                        let entity =
-                        NSEntityDescription.entity(forEntityName: "SavedUsers",
-                                                   in: privateMOC)!
-                        
-                        var managedObject = NSManagedObject(entity: entity,
-                                                            insertInto: privateMOC)
-                        
-                        managedObject = getManagedObjectFromUser(managedObject , user)
-                        
-                        do {
-                            try privateMOC.save()
-                            
-                        } catch let error as NSError {
-                            print("Could not save. \(error), \(error.userInfo)")
+                    do {
+                        try privateMOC.save()
+                        managedContext.performAndWait {
+                            do {
+                                try managedContext.save()
+                            } catch {
+                                fatalError("Failure to save context: \(error)")
+                            }
                         }
                         
-                        
+                    } catch let error as NSError {
+                        print("Could not save. \(error), \(error.userInfo)")
                     }
+                    
                 }
                 
                 
@@ -111,39 +113,38 @@ class DataManager{
                     
                     managedObject = getMnagedObjectFromPhoto(managedObject, photo)
                     try privateMOC.save()
+                    managedContext.performAndWait {
+                        do {
+                            try managedContext.save()
+                        } catch {
+                            fatalError("Failure to save context: \(error)")
+                        }
+                    }
                     
                 }
                 else {
+                    let entity =
+                    NSEntityDescription.entity(forEntityName: "SavedPhotos",
+                                               in: privateMOC)!
                     
-                    //insert
-                    let appDelegate =
-                    UIApplication.shared.delegate as? AppDelegate
+                    var managedObject = NSManagedObject(entity: entity,
+                                                        insertInto: privateMOC)
                     
-                    let managedContext =
-                    appDelegate!.persistentContainer.viewContext
+                    managedObject = getMnagedObjectFromPhoto(managedObject , photo)
                     
-                    let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-                    privateMOC.parent = managedContext
-                    
-                    privateMOC.perform { [self] in
-                        
-                        let entity =
-                        NSEntityDescription.entity(forEntityName: "SavedPhotos",
-                                                   in: privateMOC)!
-                        
-                        var managedObject = NSManagedObject(entity: entity,
-                                                            insertInto: privateMOC)
-                        
-                        managedObject = getMnagedObjectFromPhoto(managedObject , photo)
-                        
-                        do {
-                            try privateMOC.save()
-                        } catch let error as NSError {
-                            print("Could not save. \(error), \(error.userInfo)")
+                    do {
+                        try privateMOC.save()
+                        managedContext.performAndWait {
+                            do {
+                                try managedContext.save()
+                            } catch {
+                                fatalError("Failure to save context: \(error)")
+                            }
                         }
-                        
-                        
+                    } catch let error as NSError {
+                        print("Could not save. \(error), \(error.userInfo)")
                     }
+                    
                 }
                 
             } catch let error as NSError {
@@ -168,11 +169,12 @@ class DataManager{
         let zipcode = managedObject.value(forKeyPath: "zipcode") as! String
         let lat = managedObject.value(forKeyPath: "lat") as! String
         let lng = managedObject.value(forKeyPath: "lng") as! String
-        
+        let isFavorite = Bool(exactly: managedObject.value(forKeyPath: "isFavorite") as! NSNumber)
         let userStruct:User = User(id: id, name: name, username: username, email: email, phone: phone, address: Address(street: street, suite: suite, city: city, zipcode: zipcode, geo: Geo(lat: lat, lng: lng)), website: "", company: Company(name: "", catchPhrase: "", bs: ""))
         
         
         let user:UserClass = UserClass(u: userStruct)
+        user.isFavorite = isFavorite!
         return user
         
         
@@ -189,7 +191,7 @@ class DataManager{
         managedObject.setValue(user.u.address.zipcode, forKeyPath: "zipcode")
         managedObject.setValue(user.u.address.geo.lat, forKeyPath: "lat")
         managedObject.setValue(user.u.address.geo.lng, forKeyPath: "lng")
-        
+        managedObject.setValue(NSNumber(value: user.isFavorite) , forKeyPath: "isFavorite")
         
         return managedObject
     }
@@ -235,7 +237,7 @@ class DataManager{
             {
                 savedUsers.append(getUserFromManagedObject(user))
             }
-            
+            savedUsers.sort( by: {$0.u.id < $1.u.id})
             
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
