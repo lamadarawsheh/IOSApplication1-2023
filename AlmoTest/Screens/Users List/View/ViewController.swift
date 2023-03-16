@@ -20,7 +20,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     var image:UIImage = SingeltonUser.User.image
     @IBOutlet weak var mapView :MKMapView!
     var userListViewModel = UserListViewModel()
-    
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad()  {
         
@@ -59,16 +59,9 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         
     }
     @IBAction func configurefavorites(){
-        if favoriteSwitch.isOn
-        {
-            userListViewModel.users = userListViewModel.users.filter({$0.isFavorite == true})
-            tableView.reloadData()
-        }
-        else {
-            userListViewModel.users = userListViewModel.backUpUsers
-            tableView.reloadData()
-        }
-        
+        userListViewModel.switchState =  favoriteSwitch.isOn
+        tableView.reloadData()
+        defaults.set(favoriteSwitch.isOn, forKey: "favoriteSwitch")
     }
     
     
@@ -93,6 +86,8 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         configureItems()
         tableView.reloadData()
+        favoriteSwitch.isOn = defaults.bool(forKey: "favoriteSwitch")
+        configurefavorites()
     }
     
     @objc func goToEdit(sender: UIBarButtonItem) {
@@ -124,7 +119,7 @@ class ViewController: UIViewController ,UITableViewDelegate ,UITableViewDataSour
         
         let details  = self.storyboard?.instantiateViewController(identifier: "detailswithscroll") as!   CustomDetailsViewController
         
-        details.user = userListViewModel.users[indexPath.row]
+        details.user = userListViewModel.getUsers()[indexPath.row]
         details.detailsViewModel.user = details.user
         details.detailsViewModel.userListViewModel = userListViewModel
         self.navigationController?.pushViewController(details, animated: true)

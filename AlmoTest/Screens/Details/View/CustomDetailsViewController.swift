@@ -13,8 +13,8 @@ class CustomDetailsViewController: UIViewController {
     var user:UserClass? = nil
     
     
+    @IBOutlet weak var favoriteButton: UIButton!
     
-    @IBOutlet weak var favoriteImageView: UIImageView!
     @IBOutlet weak var usernameTextView: UITextView!
     
     @IBOutlet weak var emailTextView: UITextView!
@@ -35,12 +35,8 @@ class CustomDetailsViewController: UIViewController {
         
         setImage()
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(favoriteImageViewTapped(tapGestureRecognizer:)))
-        favoriteImageView.isUserInteractionEnabled = true
-        favoriteImageView.addGestureRecognizer(tapGestureRecognizer)
-        
         if let User = user{
-            setFavoriteImage()
+            setFavoriteButton()
             title = (User.u.name)+" details"
             usernameTextView.text = User.u.username
             emailTextView.text = User.u.email
@@ -83,31 +79,24 @@ class CustomDetailsViewController: UIViewController {
         mapKitView.addAnnotation(pin)
     }
     
-    @objc func favoriteImageViewTapped(tapGestureRecognizer: UITapGestureRecognizer)
-    {
-        if detailsViewModel.isfavourite()
-        {
-            favoriteImageView.image = UIImage(systemName: "star")
-            favoriteImageView.tintColor = .systemGray
-            detailsViewModel.removeFromFavorite()
-        }
-        else
-        {
-            favoriteImageView.image = UIImage(systemName: "star.fill")
-            favoriteImageView.tintColor = .systemYellow
-            detailsViewModel.addToFavorite()
-        }
+    @IBAction func favoriteButtonTapped(_ sender: Any) {
+        detailsViewModel.toggleFavoriteState()
+        setFavoriteButton()
+        
     }
-    func setFavoriteImage (){
+    func setFavoriteButton (){
+        favoriteButton.setTitle("", for: .normal)
+        
+        
         if detailsViewModel.isfavourite()
         {
-            favoriteImageView.image = UIImage(systemName: "star.fill")
-            favoriteImageView.tintColor = .systemYellow
+            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            favoriteButton.tintColor = .systemYellow
         }
         else
         {
-            favoriteImageView.image = UIImage(systemName: "star")
-            favoriteImageView.tintColor = .systemGray
+            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+            favoriteButton.tintColor = .systemGray
         }
         
         

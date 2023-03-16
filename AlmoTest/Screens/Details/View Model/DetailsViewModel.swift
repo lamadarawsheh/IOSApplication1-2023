@@ -31,11 +31,8 @@ class DetailsViewModel{
         let result = userListViewModel?.users.first(where: {$0.u.id == user!.u.id})
         return result!.isFavorite
     }
-    func addToFavorite(){
-        userListViewModel?.addToFavorite(user!)
-    }
-    func removeFromFavorite(){
-        userListViewModel?.removeFromFavorite(user!)
+    func toggleFavoriteState(){
+        userListViewModel?.toggleFavoriteState(user!)
     }
     
     
